@@ -1,0 +1,6 @@
+@FourthPro_HostAddress = http://localhost:5112
+
+GET {{FourthPro_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
