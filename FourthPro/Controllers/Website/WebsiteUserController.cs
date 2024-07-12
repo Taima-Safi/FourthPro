@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace FourthPro.Controllers.Website;
 
@@ -7,13 +6,4 @@ namespace FourthPro.Controllers.Website;
 [ApiController]
 public class WebsiteUserController : ControllerBase
 {
-    public WebsiteUserController()
-    {
-    }
-    [HttpGet]
-    public async Task<IActionResult> GetAllUser()
-    {
-
-        return Ok();
-    }
 }

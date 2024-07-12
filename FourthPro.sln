@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FourthPro.Repository", "Fou
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FourthPro.Shared", "FourthPro.Shared\FourthPro.Shared.csproj", "{37D8AE25-3524-4B78-A2F9-3312FA3541AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FourthPro.Database", "FourthPro.Database\FourthPro.Database.csproj", "{58CA199E-BB70-4C80-9720-A941FE465824}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FourthPro.Database", "FourthPro.Database\FourthPro.Database.csproj", "{58CA199E-BB70-4C80-9720-A941FE465824}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FourthPro.Dto", "FourthPro.Dto\FourthPro.Dto.csproj", "{2764C806-9668-49DB-9218-E68CF21DDFB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{58CA199E-BB70-4C80-9720-A941FE465824}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58CA199E-BB70-4C80-9720-A941FE465824}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58CA199E-BB70-4C80-9720-A941FE465824}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2764C806-9668-49DB-9218-E68CF21DDFB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2764C806-9668-49DB-9218-E68CF21DDFB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2764C806-9668-49DB-9218-E68CF21DDFB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2764C806-9668-49DB-9218-E68CF21DDFB1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
