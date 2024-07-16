@@ -43,7 +43,7 @@ public class DoctorRepo : IDoctorRepo
             DepartmentName = d.Department.Name
         }).FirstOrDefaultAsync();
 
-    public async Task<int> GetDoctorsCount(string search)//filter by department name, can be null
+    public async Task<int> GetDoctorsCountAsync(string search)//filter by department name, can be null
     => await context.Doctor.Where(d => (string.IsNullOrEmpty(search) || d.Department.Name.Contains(search))).CountAsync();
 
     public async Task UpdateAsync(DoctorFormDto dto, int doctorId)

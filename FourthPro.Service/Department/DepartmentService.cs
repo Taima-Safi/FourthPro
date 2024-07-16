@@ -1,0 +1,60 @@
+﻿using FourthPro.Dto.Department;
+using FourthPro.Repository.Department;
+using FourthPro.Repository.User;
+using FourthPro.Service.Base;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+
+namespace FourthPro.Service.Department;
+
+public class DepartmentService : BaseService, IDepartmentService
+{
+    private readonly IDepartmentRepo departmentRepo;
+    private readonly IUserRepo userRepo;
+    public DepartmentService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDepartmentRepo departmentRepo, IUserRepo userRepo)
+        : base(configuration, httpContextAccessor)
+    {
+        this.departmentRepo = departmentRepo;
+        this.userRepo = userRepo;
+    }
+    public async Task<int> AddAsync(string name)
+    {
+        if (CurrentUserId == -1)
+            throw new Exception("You do not have Authorize..");
+
+        if (await userRepo.CheckIfStudentById(CurrentUserId))
+            throw new Exception("You do not have permission to add department..");
+
+        var departmentId = await departmentRepo.AddAsync(name);
+        return departmentId;
+    }
+    public async Task<List<DepartmentDto>> GetAllAsync()
+    => await departmentRepo.GetAllAsync();
+
+    public async Task<int> GetDepartmentsCountAsync()
+        => await departmentRepo.GetDepartmentsCountAsync();
+
+    public async Task<DepartmentDto> GetByIdAsync(int departmentId)
+    => await departmentRepo.GetByIdAsync(departmentId);
+
+    public async Task UpdateAsync(int departmentId, string name)
+    {
+        if (CurrentUserId == -1)
+            throw new Exception("You do not have Authorize..");
+
+        if (await userRepo.CheckIfStudentById(CurrentUserId))
+            throw new Exception("You do not have permission to edit department..");
+
+        await departmentRepo.UpdateAsync(departmentId, name);
+    }
+    public async Task RemoveAsync(int departmentId)
+    {
+        if (CurrentUserId == -1)
+            throw new Exception("You do not have Authorize..");
+
+        if (await userRepo.CheckIfStudentById(CurrentUserId))
+            throw new Exception("You do not have permission to delete department..");
+
+        await departmentRepo.RemoveAsync(departmentId);
+    }
+}

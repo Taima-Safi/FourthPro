@@ -30,6 +30,12 @@ public class DashboardDoctorController : ControllerBase
         var result = await doctorService.GetByIdAsync(doctorId);
         return Ok(result);
     }
+    [HttpGet]
+    public async Task<IActionResult> GatDoctorCount(string search)
+    {
+        var result = await doctorService.GetDoctorsCountAsync(search);
+        return Ok(result);
+    }
     [HttpPost]
     public async Task<IActionResult> Update(DoctorFormDto dto, int doctorId)
     {

@@ -7,7 +7,7 @@ public interface IDoctorService
     Task<int> AddAsync(DoctorFormDto dto);
     Task<List<DoctorDto>> GetAllAsync(string search);
     Task<DoctorDto> GetByIdAsync(int doctorId);
-    Task<int> GetDoctorsCount(string search);
+    Task<int> GetDoctorsCountAsync(string search);
     Task RemoveAsync(int doctorId);
     Task UpdateAsync(DoctorFormDto dto, int doctorId);
 }
