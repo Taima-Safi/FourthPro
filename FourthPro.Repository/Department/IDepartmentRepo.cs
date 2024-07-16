@@ -6,6 +6,7 @@ namespace FourthPro.Repository.Department;
 public interface IDepartmentRepo
 {
     Task<int> AddAsync(string name);
+    Task<bool> CheckIfExist(int departmentId);
     Task<List<DepartmentDto>> GetAllAsync();
     Task<DepartmentDto> GetByIdAsync(int departmentId);
     Task<int> GetDepartmentsCountAsync();

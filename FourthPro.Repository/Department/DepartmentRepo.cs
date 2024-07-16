@@ -56,4 +56,7 @@ public class DepartmentRepo : IDepartmentRepo
 
     public async Task RemoveAsync(int departmentId)
         => await context.Department.Where(d => d.Id == departmentId).ExecuteDeleteAsync();
+
+    public async Task<bool> CheckIfExist(int departmentId)
+    => await context.Department.Where(d => d.Id == departmentId).AnyAsync();
 }

@@ -45,6 +45,9 @@ public class DepartmentService : BaseService, IDepartmentService
         if (await userRepo.CheckIfStudentById(CurrentUserId))
             throw new Exception("You do not have permission to edit department..");
 
+        if (!await departmentRepo.CheckIfExist(departmentId))
+            throw new Exception("Department not found..");
+
         await departmentRepo.UpdateAsync(departmentId, name);
     }
     public async Task RemoveAsync(int departmentId)
@@ -54,6 +57,9 @@ public class DepartmentService : BaseService, IDepartmentService
 
         if (await userRepo.CheckIfStudentById(CurrentUserId))
             throw new Exception("You do not have permission to delete department..");
+
+        if (!await departmentRepo.CheckIfExist(departmentId))
+            throw new Exception("Department not found..");
 
         await departmentRepo.RemoveAsync(departmentId);
     }
