@@ -5,9 +5,17 @@ namespace FourthPro.Database.Context;
 
 public class FourthProDbContext : DbContext
 {
+    public FourthProDbContext()
+    {
+
+    }
     public FourthProDbContext(DbContextOptions<FourthProDbContext> options) : base(options)
     {
     }
+    public DbSet<UserModel> User { get; set; }
+    public DbSet<DoctorModel> Doctor { get; set; }
+    public DbSet<DepartmentModel> Department { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
@@ -16,5 +24,4 @@ public class FourthProDbContext : DbContext
     {
         base.OnModelCreating(builder);
     }
-    public DbSet<UserModel> User { get; set; }
 }
