@@ -1,5 +1,6 @@
 ﻿using FourthPro.Database.Context;
 using FourthPro.Database.Model;
+using FourthPro.Dto.Department;
 using FourthPro.Dto.Doctor;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,7 +32,11 @@ public class DoctorRepo : IDoctorRepo
             Id = d.Id,
             Name = d.Name,
             Email = d.Email,
-            DepartmentName = d.Department.Name
+            Department = new DepartmentDto
+            {
+                Id = d.Id,
+                Name = d.Name
+            }
         }).ToListAsync();
 
     public async Task<DoctorDto> GetById(int doctorId)
@@ -40,7 +45,11 @@ public class DoctorRepo : IDoctorRepo
             Id = d.Id,
             Name = d.Name,
             Email = d.Email,
-            DepartmentName = d.Department.Name
+            Department = new DepartmentDto
+            {
+                Id = d.Id,
+                Name = d.Name
+            }
         }).FirstOrDefaultAsync();
 
     public async Task<int> GetDoctorsCountAsync(string search)//filter by department name, can be null
