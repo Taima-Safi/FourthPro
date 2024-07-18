@@ -10,4 +10,7 @@ public interface IUserRepo
     Task<List<UserDto>> GetAllUser();
     Task<UserDto> GetUserByIdentifierAsync(int identifier);
     Task<int> GetUsersCountAsync(YearType? year);
+    Task<UserDto> GetUserByIdAsync(int id);
+    bool checkIfAdmin(int id);
+    Task<RoleType> GetRoleAsync(int id);
 }

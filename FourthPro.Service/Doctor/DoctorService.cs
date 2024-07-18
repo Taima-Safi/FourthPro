@@ -22,10 +22,10 @@ public class DoctorService : BaseService, IDoctorService
     public async Task<int> AddAsync(DoctorFormDto dto)
     {
         if (CurrentUserId == -1)
-            throw new UnauthorizedAccessException("You do not have Authorize..");
+            throw new AccessViolationException("You do not have Authorize..");
 
         if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
-            throw new NotFoundException("You do not have permission to add doctor..");
+            throw new UnauthorizedAccessException("You do not have permission to add doctor..");
 
         var doctorId = await doctorRepo.AddAsync(dto);
         return doctorId;
@@ -41,8 +41,8 @@ public class DoctorService : BaseService, IDoctorService
 
     public async Task UpdateAsync(DoctorFormDto dto, int doctorId)
     {
-        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
-            throw new NotFoundException("You do not have permission to update doctor..");
+        if (!userRepo.checkIfAdmin(CurrentUserId))
+            throw new UnauthorizedAccessException("You do not have permission to update doctor..");
 
         if (!await doctorRepo.CheckIfExist(doctorId))
             throw new NotFoundException("Doctor not found..");
@@ -52,13 +52,13 @@ public class DoctorService : BaseService, IDoctorService
     public async Task RemoveAsync(int doctorId)
     {
         if (CurrentUserId == -1)
-            throw new UnauthorizedAccessException("You do not have Authorize..");
+            throw new AccessViolationException("You do not have Authorize..");
 
-        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
-            throw new NotFoundException("You do not have permission to delete doctor..");
+        if (!userRepo.checkIfAdmin(CurrentUserId))
+            throw new UnauthorizedAccessException("You do not have permission to delete doctor..");
 
         if (!await doctorRepo.CheckIfExist(doctorId))
-            throw new Exception("Doctor not found..");
+            throw new NotFoundException("Doctor not found..");
 
         await doctorRepo.RemoveAsync(doctorId);
     }

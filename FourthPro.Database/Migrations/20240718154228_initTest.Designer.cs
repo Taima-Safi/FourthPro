@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FourthPro.Database.Migrations
 {
     [DbContext(typeof(FourthProDbContext))]
-    [Migration("20240718095549_SqIinit")]
-    partial class SqIinit
+    [Migration("20240718154228_initTest")]
+    partial class initTest
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

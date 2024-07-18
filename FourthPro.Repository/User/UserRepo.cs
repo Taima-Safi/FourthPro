@@ -31,7 +31,18 @@ public class UserRepo : IUserRepo
         return user.Entity.Id;
     }
     public async Task<bool> CheckIfStudentByIdentifier(int id)
-        => await context.User.Where(u => u.Id == id).AnyAsync();
+        => await context.User.AnyAsync(u => u.Id == id && u.Identifier != 0);
+
+    public bool checkIfAdmin(int id)
+    {
+        var x = context.User.Any(u => u.Id == id && u.Identifier == 0);
+        return x;
+    }
+    public async Task<RoleType> GetRoleAsync(int id)
+    {
+        var x = await context.User.Where(u => u.Id == id).Select(u => u.Role).FirstOrDefaultAsync();
+        return x;
+    }
     public async Task<List<UserDto>> GetAllUser()
     {
         return await context.User.Select(u => new UserDto
@@ -43,15 +54,24 @@ public class UserRepo : IUserRepo
             Email = u.Email,
         }).ToListAsync();
     }
+    public async Task<UserDto> GetUserByIdAsync(int id)
+        => await context.User.Where(u => u.Id == id).Select(u => new UserDto
+        {
+            Identifier = u.Identifier,
+            Name = u.Name,
+            Year = u.Year,
+            Role = u.Role
+        }).FirstOrDefaultAsync();
+
     public async Task<UserDto> GetUserByIdentifierAsync(int identifier)
-        => await context.User.Select(u => new UserDto
+        => await context.User.Where(u => u.Identifier == identifier).Select(u => new UserDto
         {
             Identifier = u.Identifier,
             Name = u.Name,
             Year = u.Year,
             Role = u.Role,
             Email = u.Email,
-            FifthProject = new ProjectDto
+            FifthProject = u.FifthProjectId != null ? new ProjectDto
             {
                 Description = u.FifthProject.Description,
                 Title = u.FifthProject.Title,
@@ -68,8 +88,8 @@ public class UserRepo : IUserRepo
                         Title = u.FifthProject.Doctor.Department.Title
                     }
                 }
-            },
-            FourthProject = new ProjectDto
+            } : null,
+            FourthProject = u.FourthProjectId != null ? new ProjectDto
             {
                 Description = u.FourthProject.Description,
                 Title = u.FourthProject.Title,
@@ -86,7 +106,7 @@ public class UserRepo : IUserRepo
                         Title = u.FourthProject.Doctor.Department.Title
                     }
                 }
-            },
+            } : null,
         }).FirstOrDefaultAsync();
 
     public async Task<int> GetUsersCountAsync(YearType? year)

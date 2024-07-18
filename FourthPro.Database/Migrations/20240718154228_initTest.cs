@@ -5,7 +5,7 @@
 namespace FourthPro.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class initTest : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -80,8 +80,7 @@ namespace FourthPro.Database.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FourthProjectId = table.Column<int>(type: "int", nullable: true),
-                    FifthProjectId = table.Column<int>(type: "int", nullable: true),
-                    ProjectModelId = table.Column<int>(type: "int", nullable: true)
+                    FifthProjectId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -90,17 +89,10 @@ namespace FourthPro.Database.Migrations
                         name: "FK_User_Project_FifthProjectId",
                         column: x => x.FifthProjectId,
                         principalTable: "Project",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_User_Project_FourthProjectId",
                         column: x => x.FourthProjectId,
-                        principalTable: "Project",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_User_Project_ProjectModelId",
-                        column: x => x.ProjectModelId,
                         principalTable: "Project",
                         principalColumn: "Id");
                 });
@@ -124,11 +116,6 @@ namespace FourthPro.Database.Migrations
                 name: "IX_User_FourthProjectId",
                 table: "User",
                 column: "FourthProjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_ProjectModelId",
-                table: "User",
-                column: "ProjectModelId");
         }
 
         /// <inheritdoc />

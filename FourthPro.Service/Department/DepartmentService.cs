@@ -21,10 +21,10 @@ public class DepartmentService : BaseService, IDepartmentService
     public async Task<int> AddAsync(string name)
     {
         if (CurrentUserId == -1)
-            throw new UnauthorizedAccessException("You do not have Authorize..");
+            throw new AccessViolationException("You do not have Authorize..");
 
-        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
-            throw new NotFoundException("You do not have permission to add department..");
+        if (!userRepo.checkIfAdmin(CurrentUserId))
+            throw new UnauthorizedAccessException("You do not have permission to add department..");
 
         var departmentId = await departmentRepo.AddAsync(name);
         return departmentId;
@@ -41,26 +41,26 @@ public class DepartmentService : BaseService, IDepartmentService
     public async Task UpdateAsync(int departmentId, string name)
     {
         if (CurrentUserId == -1)
-            throw new Exception("You do not have Authorize..");
+            throw new AccessViolationException("You do not have Authorize..");
 
         if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
-            throw new Exception("You do not have permission to edit department..");
+            throw new UnauthorizedAccessException("You do not have permission to edit department..");
 
         if (!await departmentRepo.CheckIfExist(departmentId))
-            throw new Exception("Department not found..");
+            throw new NotFoundException("Department not found..");
 
         await departmentRepo.UpdateAsync(departmentId, name);
     }
     public async Task RemoveAsync(int departmentId)
     {
         if (CurrentUserId == -1)
-            throw new Exception("You do not have Authorize..");
+            throw new AccessViolationException("You do not have Authorize..");
 
         if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
-            throw new Exception("You do not have permission to delete department..");
+            throw new UnauthorizedAccessException("You do not have permission to delete department..");
 
         if (!await departmentRepo.CheckIfExist(departmentId))
-            throw new Exception("Department not found..");
+            throw new NotFoundException("Department not found..");
 
         await departmentRepo.RemoveAsync(departmentId);
     }

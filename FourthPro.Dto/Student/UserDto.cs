@@ -5,6 +5,7 @@ namespace FourthPro.Dto.Student;
 
 public class UserDto
 {
+    public int Id { get; set; }//University Number
     public int Identifier { get; set; }//University Number
     public string Password { get; set; }
     public YearType Year { get; set; }
