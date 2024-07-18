@@ -10,7 +10,7 @@ public class ProjectDto
     public string Title { get; set; }
     public string Description { get; set; }
     public string Tools { get; set; }
-    public ProjectType Type { get; set; }
+    public Shared.Enum.SectionType Type { get; set; }
     public DoctorDto Doctor { get; set; }
     public List<UserDto> Users { get; set; } = new();
 }

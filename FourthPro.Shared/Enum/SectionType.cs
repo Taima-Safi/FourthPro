@@ -1,6 +1,6 @@
 ﻿namespace FourthPro.Shared.Enum;
 
-public enum ProjectType
+public enum SectionType
 {
     AI,
     Programming,
