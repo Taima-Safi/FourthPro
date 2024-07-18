@@ -1,11 +1,14 @@
 ﻿
 using FourthPro.Dto.Student;
+using FourthPro.Shared.Enum;
 
 namespace FourthPro.Repository.User;
 
 public interface IUserRepo
 {
-    Task<int> AddAsync(StudentDto dto, string hashPassword);
-    Task<bool> CheckIfStudentById(int id);
-    Task<List<StudentDto>> GetAllUser();
+    Task<int> SignUpAsync(UserFormDto dto, string hashPassword);
+    Task<bool> CheckIfStudentByIdentifier(int identifier);
+    Task<List<UserDto>> GetAllUser();
+    Task<UserDto> GetUserByIdentifierAsync(int identifier);
+    Task<int> GetUsersCountAsync(YearType? year);
 }

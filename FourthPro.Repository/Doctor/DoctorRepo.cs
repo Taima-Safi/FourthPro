@@ -27,7 +27,7 @@ public class DoctorRepo : IDoctorRepo
         return doctor.Entity.Id;
     }
     public async Task<List<DoctorDto>> GetAllAsync(string search)//filter by department name, can be null
-        => await context.Doctor.Where(d => (string.IsNullOrEmpty(search) || d.Department.Name.Contains(search))).Select(d => new DoctorDto
+        => await context.Doctor.Where(d => (string.IsNullOrEmpty(search) || d.Department.Title.Contains(search))).Select(d => new DoctorDto
         {
             Id = d.Id,
             Name = d.Name,
@@ -35,7 +35,7 @@ public class DoctorRepo : IDoctorRepo
             Department = new DepartmentDto
             {
                 Id = d.Id,
-                Name = d.Name
+                Title = d.Name
             }
         }).ToListAsync();
 
@@ -48,12 +48,12 @@ public class DoctorRepo : IDoctorRepo
             Department = new DepartmentDto
             {
                 Id = d.Id,
-                Name = d.Name
+                Title = d.Name
             }
         }).FirstOrDefaultAsync();
 
     public async Task<int> GetDoctorsCountAsync(string search)//filter by department name, can be null
-    => await context.Doctor.Where(d => (string.IsNullOrEmpty(search) || d.Department.Name.Contains(search))).CountAsync();
+    => await context.Doctor.Where(d => (string.IsNullOrEmpty(search) || d.Department.Title.Contains(search))).CountAsync();
 
     public async Task UpdateAsync(DoctorFormDto dto, int doctorId)
         => await context.Doctor.Where(d => d.Id == doctorId).ExecuteUpdateAsync(d => d.SetProperty(d => d.Email, dto.Email).SetProperty(d => d.DepartmentId, dto.DepartmentId).SetProperty(d => d.Name, dto.Name));
