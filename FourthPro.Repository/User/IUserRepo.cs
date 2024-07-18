@@ -1,6 +1,4 @@
-﻿
-using FourthPro.Database.Model;
-using FourthPro.Dto.Student;
+﻿using FourthPro.Dto.Student;
 using FourthPro.Shared.Enum;
 
 namespace FourthPro.Repository.User;
@@ -12,7 +10,4 @@ public interface IUserRepo
     Task<List<UserDto>> GetAllUser();
     Task<UserDto> GetUserByIdentifierAsync(int identifier);
     Task<int> GetUsersCountAsync(YearType? year);
-    // Task<bool> CheckIfAdminAsync(int id);
-    // Task<UserModel> CheckIfAdminAsync(int id);
-    Task<UserModel> CheckIfAdminAsync(int id);
 }
