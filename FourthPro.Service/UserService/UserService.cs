@@ -27,13 +27,13 @@ public class UserService : BaseService, IUserService
         Issuer = this.configuration["JwtConfig:validIssuer"];
         Audience = this.configuration["JwtConfig:validAudience"];
     }
-    public async Task<Tuple<int, string>> SignUpAsync(UserFormDto dto)
+    public async Task<string> SignUpAsync(UserFormDto dto)
     {
         var hashPassword = HashPassword(dto.Password);
 
-        var (id, identfier) = await userRepo.SignUpAsync(dto, hashPassword);
+        var id = await userRepo.SignUpAsync(dto, hashPassword);
         var token = await CreateTokenAsync(true, id, 1);
-        return new(identfier, token);
+        return token;
     }
     public async Task<List<UserDto>> GetAllAsync()
     {

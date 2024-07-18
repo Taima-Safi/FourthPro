@@ -18,8 +18,8 @@ public class WebsiteUserController : ControllerBase
     [HttpPost, AllowAnonymous]
     public async Task<IActionResult> Add(UserFormDto dto)
     {
-        var (identifier, token) = await userService.SignUpAsync(dto);
-        return Ok((identifier, token));
+        var token = await userService.SignUpAsync(dto);
+        return Ok(token);
     }
     [HttpGet, AllowAnonymous]
     public async Task<IActionResult> GetAll()
