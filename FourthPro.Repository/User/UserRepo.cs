@@ -16,7 +16,7 @@ public class UserRepo : IUserRepo
     {
         this.context = context;
     }
-    public async Task<int> SignUpAsync(UserFormDto dto, string hashPassword)
+    public async Task<Tuple<int, int>> SignUpAsync(UserFormDto dto, string hashPassword)
     {
         var user = await context.User.AddAsync(new UserModel
         {
@@ -28,7 +28,7 @@ public class UserRepo : IUserRepo
             Identifier = dto.Identifier
         });
         await context.SaveChangesAsync();
-        return user.Entity.Identifier;
+        return new(user.Entity.Id, user.Entity.Identifier);
     }
     public async Task<bool> CheckIfStudentByIdentifier(int identifier)
         => await context.User.Where(u => u.Identifier == identifier && u.Role == Shared.Enum.RoleType.Student).AnyAsync();

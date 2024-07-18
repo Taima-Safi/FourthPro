@@ -1,5 +1,6 @@
 using FourthPro.Config;
 using FourthPro.Database.Context;
+using FourthPro.Middleware;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,13 +11,22 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddTransient<ErrorHandlerMiddleware>();
+builder.Services.AddTransient<AuthMiddleware>();
 builder.Services.AddHttpContextAccessor();
 #region Database
-var connectionString = builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "SomeeServer" : "SomeeServer");
+var connectionString = builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "SqlServer" : "SqlServer");
 builder.Services.AddDbContext<FourthProDbContext>(options =>
 {
     options.UseSqlServer(connectionString/*, ServerVersion.AutoDetect(connectionString)*/);
 });
+#endregion
+
+#region Caching Configuration
+builder.Services.AddMemoryCache(opt =>
+{
+    opt.TrackLinkedCacheEntries = true;
+}).AddResponseCaching();
 #endregion
 
 builder.Services.ConfigureAuthentication(builder.Configuration);
@@ -41,6 +51,10 @@ app.UseCors(cors => cors
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSwagger();
+app.UseRouting();
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
+app.UseMiddleware<AuthMiddleware>();
 app.UseSwaggerUI();
 
 app.UseAuthentication();

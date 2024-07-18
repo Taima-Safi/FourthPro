@@ -2,6 +2,7 @@
 using FourthPro.Repository.Doctor;
 using FourthPro.Repository.User;
 using FourthPro.Service.Base;
+using FourthPro.Shared.Exception;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
@@ -20,11 +21,11 @@ public class DoctorService : BaseService, IDoctorService
     }
     public async Task<int> AddAsync(DoctorFormDto dto)
     {
-        if (CurrentUserId == -1)
-            throw new Exception("You do not have Authorize..");
+        //if (CurrentUserId == -1)
+        //    throw new Exception("You do not have Authorize..");
 
-        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
-            throw new Exception("You do not have permission to add doctor..");
+        //if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
+        //    throw new Exception("You do not have permission to add doctor..");
 
         var doctorId = await doctorRepo.AddAsync(dto);
         return doctorId;
@@ -47,7 +48,7 @@ public class DoctorService : BaseService, IDoctorService
             throw new Exception("You do not have permission to edit doctor..");
 
         if (!await doctorRepo.CheckIfExist(doctorId))
-            throw new Exception("Doctor not found..");
+            throw new NotFoundException("Doctor not found..");
 
         await doctorRepo.UpdateAsync(dto, doctorId);
     }

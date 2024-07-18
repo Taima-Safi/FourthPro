@@ -1,5 +1,6 @@
 ﻿using FourthPro.Dto.Doctor;
 using FourthPro.Service.Doctor;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FourthPro.Controllers.Dashboard;
@@ -15,7 +16,7 @@ public class DashboardDoctorController : ControllerBase
         this.doctorService = doctorService;
     }
 
-    [HttpPost]
+    [HttpPost, AllowAnonymous]
     public async Task<IActionResult> Add(DoctorFormDto dto)
         => Ok(await doctorService.AddAsync(dto));
     [HttpGet]

@@ -15,12 +15,13 @@ public class WebsiteUserController : ControllerBase
     {
         this.userService = userService;
     }
-    [HttpPost]
+    [HttpPost, AllowAnonymous]
     public async Task<IActionResult> Add(UserFormDto dto)
     {
-        return Ok(await userService.SignUpAsync(dto));
+        var (identifier, token) = await userService.SignUpAsync(dto);
+        return Ok((identifier, token));
     }
-    [HttpGet, Authorize]
+    [HttpGet, AllowAnonymous]
     public async Task<IActionResult> GetAll()
         => Ok(await userService.GetAllAsync());
 }

@@ -22,9 +22,9 @@ public class DashboardUserController : ControllerBase
     public async Task<IActionResult> GetUserByIdentifier(int identifier)
     => Ok(await userService.GetUserByIdentifierAsync(identifier));
 
-    [HttpGet]
-    public async Task<IActionResult> GetUsersByProjectId(int projectId)
-    => Ok(await userService.GetUsersByProjectIdAsync(projectId));
+    //[HttpGet]
+    //public async Task<IActionResult> GetUsersByProjectId(int projectId)
+    //=> Ok(await userService.GetUsersByProjectIdAsync(projectId));
 
     [HttpGet]
     public async Task<IActionResult> GetUsersCount(YearType? year)

@@ -11,5 +11,5 @@ public class ProjectModel
     public ProjectType Type { get; set; }
     public int DoctorId { get; set; }
     public DoctorModel Doctor { get; set; }
-    public List<UserModel> Users { get; set; }
+    public ICollection<UserModel> Users { get; set; }
 }

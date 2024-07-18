@@ -1,4 +1,5 @@
 ﻿using FourthPro.Service.Department;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FourthPro.Controllers.Dashboard;
@@ -13,7 +14,7 @@ public class DashboardDepartmentController : ControllerBase
     {
         this.departmentService = departmentService;
     }
-    [HttpPost]
+    [HttpPost, AllowAnonymous]
     public async Task<IActionResult> Add(string name)
      => Ok(await departmentService.AddAsync(name));
     [HttpGet]
