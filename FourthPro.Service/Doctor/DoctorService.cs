@@ -2,6 +2,7 @@
 using FourthPro.Repository.Doctor;
 using FourthPro.Repository.User;
 using FourthPro.Service.Base;
+using FourthPro.Shared.Exception;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
@@ -47,7 +48,7 @@ public class DoctorService : BaseService, IDoctorService
             throw new Exception("You do not have permission to edit doctor..");
 
         if (!await doctorRepo.CheckIfExist(doctorId))
-            throw new Exception("Doctor not found..");
+            throw new NotFoundException("Doctor not found..");
 
         await doctorRepo.UpdateAsync(dto, doctorId);
     }

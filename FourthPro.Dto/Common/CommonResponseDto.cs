@@ -10,10 +10,8 @@ public class CommonResponseDto<T>
         Data = data;
         Message = message;
     }
-    public CommonResponseDto(string message)
-    {
-        Message = message;
-    }
     public T Data { get; set; }
     public string Message { get; set; }
+    public string ErrorMessage { get; set; }
+    public object ErrorMessageDetails { get; set; }
 }

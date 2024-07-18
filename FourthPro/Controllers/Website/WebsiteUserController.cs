@@ -1,6 +1,5 @@
 ﻿using FourthPro.Dto.Student;
 using FourthPro.Service.UserService;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FourthPro.Controllers.Website;
@@ -20,7 +19,7 @@ public class WebsiteUserController : ControllerBase
     {
         return Ok(await userService.AddAsync(dto));
     }
-    [HttpGet, Authorize]
+    [HttpGet]
     public async Task<IActionResult> GetAll()
         => Ok(await userService.GetAllAsync());
 }
