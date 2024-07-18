@@ -29,7 +29,7 @@ public class AuthMiddleware : IMiddleware
 
             //Dynamic Authorization here:
             var token = context.Request.Headers["Authorization"].ToString();
-            string userId = context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            //string role = context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
 
             //Check if he don't have a token or it's expired.
             if (string.IsNullOrEmpty(token) /*|| !context.User.Identity.IsAuthenticated*/)
@@ -50,7 +50,7 @@ public class AuthMiddleware : IMiddleware
 
             if (controllerName.Contains("Dashboard"))
             {
-                if (int.Parse(userId) == 0)
+                if (int.Parse(context.User.FindFirstValue(ClaimTypes.Role)) == 0)
                 {
                     await next(context);
                     return;

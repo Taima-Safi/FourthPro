@@ -11,7 +11,6 @@ public class ErrorHandlerMiddleware : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        //Error handler
         try
         {
             context.Request.EnableBuffering();

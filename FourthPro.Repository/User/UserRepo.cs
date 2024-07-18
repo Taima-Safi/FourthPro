@@ -30,8 +30,8 @@ public class UserRepo : IUserRepo
         await context.SaveChangesAsync();
         return user.Entity.Id;
     }
-    public async Task<bool> CheckIfStudentByIdentifier(int identifier)
-        => await context.User.Where(u => u.Identifier == identifier && u.Role == Shared.Enum.RoleType.Student).AnyAsync();
+    public async Task<bool> CheckIfStudentByIdentifier(int id)
+        => await context.User.Where(u => u.Id == id).AnyAsync();
 
     public async Task<List<UserDto>> GetAllUser()
     {

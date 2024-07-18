@@ -41,11 +41,9 @@ public class DoctorService : BaseService, IDoctorService
 
     public async Task UpdateAsync(DoctorFormDto dto, int doctorId)
     {
-        if (CurrentUserId == -1)
-            throw new Exception("You do not have Authorize..");
-
-        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
-            throw new Exception("You do not have permission to edit doctor..");
+        var x = await userRepo.CheckIfStudentByIdentifier(CurrentUserId);
+        if (x)
+            throw new NotFoundException("You do not have permission to edit doctor..");
 
         if (!await doctorRepo.CheckIfExist(doctorId))
             throw new NotFoundException("Doctor not found..");

@@ -12,7 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<ErrorHandlerMiddleware>();
-builder.Services.AddTransient<AuthMiddleware>();
+//builder.Services.AddTransient<AuthMiddleware>();
 builder.Services.AddHttpContextAccessor();
 #region Database
 var connectionString = builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "SqlServer" : "SqlServer");
@@ -54,7 +54,7 @@ app.UseSwagger();
 app.UseRouting();
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
-app.UseMiddleware<AuthMiddleware>();
+//app.UseMiddleware<AuthMiddleware>();
 app.UseSwaggerUI();
 
 app.UseAuthentication();

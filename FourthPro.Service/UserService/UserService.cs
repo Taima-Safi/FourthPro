@@ -48,8 +48,6 @@ public class UserService : BaseService, IUserService
     }
     public async Task<UserDto> GetUserByIdentifierAsync(int identifier)
     {
-        if (CurrentUserId == -1)
-            throw new Exception("You do not have Authorize..");
 
         var result = await userRepo.GetUserByIdentifierAsync(identifier);
         return result;
