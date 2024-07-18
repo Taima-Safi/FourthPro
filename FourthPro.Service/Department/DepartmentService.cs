@@ -2,6 +2,7 @@
 using FourthPro.Repository.Department;
 using FourthPro.Repository.User;
 using FourthPro.Service.Base;
+using FourthPro.Shared.Exception;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
@@ -19,11 +20,11 @@ public class DepartmentService : BaseService, IDepartmentService
     }
     public async Task<int> AddAsync(string name)
     {
-        //if (CurrentUserId == -1)
-        //    throw new Exception("You do not have Authorize..");
+        if (CurrentUserId == -1)
+            throw new UnauthorizedAccessException("You do not have Authorize..");
 
-        //if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
-        //    throw new Exception("You do not have permission to add department..");
+        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
+            throw new NotFoundException("You do not have permission to add department..");
 
         var departmentId = await departmentRepo.AddAsync(name);
         return departmentId;

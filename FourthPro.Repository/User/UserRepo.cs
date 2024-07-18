@@ -33,6 +33,8 @@ public class UserRepo : IUserRepo
     public async Task<bool> CheckIfStudentByIdentifier(int id)
         => await context.User.Where(u => u.Id == id).AnyAsync();
 
+    public async Task<UserModel> CheckIfAdminAsync(int id)
+        => await context.User.Where(u => u.Id == id).FirstOrDefaultAsync();
     public async Task<List<UserDto>> GetAllUser()
     {
         return await context.User.Select(u => new UserDto
