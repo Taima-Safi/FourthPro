@@ -22,7 +22,7 @@ public class DepartmentService : BaseService, IDepartmentService
         if (CurrentUserId == -1)
             throw new Exception("You do not have Authorize..");
 
-        if (await userRepo.CheckIfStudentById(CurrentUserId))
+        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
             throw new Exception("You do not have permission to add department..");
 
         var departmentId = await departmentRepo.AddAsync(name);
@@ -42,7 +42,7 @@ public class DepartmentService : BaseService, IDepartmentService
         if (CurrentUserId == -1)
             throw new Exception("You do not have Authorize..");
 
-        if (await userRepo.CheckIfStudentById(CurrentUserId))
+        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
             throw new Exception("You do not have permission to edit department..");
 
         if (!await departmentRepo.CheckIfExist(departmentId))
@@ -55,7 +55,7 @@ public class DepartmentService : BaseService, IDepartmentService
         if (CurrentUserId == -1)
             throw new Exception("You do not have Authorize..");
 
-        if (await userRepo.CheckIfStudentById(CurrentUserId))
+        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
             throw new Exception("You do not have permission to delete department..");
 
         if (!await departmentRepo.CheckIfExist(departmentId))

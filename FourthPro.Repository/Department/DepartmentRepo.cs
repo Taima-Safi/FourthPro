@@ -15,7 +15,7 @@ public class DepartmentRepo : IDepartmentRepo
     }
     public async Task<int> AddAsync(string name)
     {
-        var department = await context.AddAsync(new DepartmentModel { Name = name });
+        var department = await context.AddAsync(new DepartmentModel { Title = name });
 
         await context.SaveChangesAsync();
         return department.Entity.Id;
@@ -26,7 +26,7 @@ public class DepartmentRepo : IDepartmentRepo
         .Select(d => new DepartmentDto
         {
             Id = d.Id,
-            Name = d.Name,
+            Title = d.Title,
             Doctors = d.Doctors.Select(d => new DoctorDto
             {
                 Id = d.Id,
@@ -39,7 +39,7 @@ public class DepartmentRepo : IDepartmentRepo
         => await context.Department.Select(d => new DepartmentDto
         {
             Id = d.Id,
-            Name = d.Name,
+            Title = d.Title,
             Doctors = d.Doctors.Select(d => new DoctorDto
             {
                 Id = d.Id,
@@ -52,7 +52,7 @@ public class DepartmentRepo : IDepartmentRepo
         => await context.Department.CountAsync();
 
     public async Task UpdateAsync(int departmentId, string name)
-        => await context.Department.Where(d => d.Id == departmentId).ExecuteUpdateAsync(d => d.SetProperty(d => d.Name, name));
+        => await context.Department.Where(d => d.Id == departmentId).ExecuteUpdateAsync(d => d.SetProperty(d => d.Title, name));
 
     public async Task RemoveAsync(int departmentId)
         => await context.Department.Where(d => d.Id == departmentId).ExecuteDeleteAsync();

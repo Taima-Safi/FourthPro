@@ -1,6 +1,7 @@
-﻿using FourthPro.Dto.Common;
-using FourthPro.Dto.Student;
+﻿using FourthPro.Dto.Student;
 using FourthPro.Repository.User;
+using FourthPro.Service.Base;
+using FourthPro.Shared.Enum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -11,49 +12,65 @@ using System.Text;
 
 namespace FourthPro.Service.UserService;
 
-public class UserService : IUserService
+public class UserService : BaseService, IUserService
 {
     private readonly IUserRepo userRepo;
-    private readonly IConfiguration configuration;
-    private readonly IHttpContextAccessor httpContextAccessor;
 
     private string Key { get; set; }
     private string Issuer { get; set; }
     private string Audience { get; set; }
     public UserService(IUserRepo userRepo, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        : base(configuration, httpContextAccessor)
     {
         this.userRepo = userRepo;
-        this.configuration = configuration;
         Key = this.configuration["JwtConfig:secret"];
         Issuer = this.configuration["JwtConfig:validIssuer"];
         Audience = this.configuration["JwtConfig:validAudience"];
-        this.httpContextAccessor = httpContextAccessor;
     }
-    public async Task<Tuple<int, string>> AddAsync(StudentDto dto)
+    public async Task<Tuple<int, string>> SignUpAsync(UserFormDto dto)
     {
         var hashPassword = HashPassword(dto.Password);
 
-        var userId = await userRepo.AddAsync(dto, hashPassword);
-        var token = await CreateTokenAsync(true, userId, 1);
-        return new(userId, token);
+        var identifier = await userRepo.SignUpAsync(dto, hashPassword);
+        var token = await CreateTokenAsync(true, identifier, 1);
+        return new(identifier, token);
     }
-    public async Task<CommonResponseDto<List<StudentDto>>> GetAllAsync()
+    public async Task<List<UserDto>> GetAllAsync()
     {
-        var userId = GetCurrentUserId();
+        if (CurrentUserId == -1)
+            throw new Exception("You do not have Authorize..");
 
-        if (!await userRepo.CheckIfStudentById(userId))
-            return new(new List<StudentDto>(), "test message");
+        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
+            throw new Exception("You do not have permission..");
 
         var result = await userRepo.GetAllUser();
-
-        return new(result, "");
+        return result;
     }
-    public async Task<string> CreateTokenAsync(bool isStudent, long userId, int role /*admin\student*/)
+    public async Task<UserDto> GetUserByIdentifierAsync(int identifier)
+    {
+        if (CurrentUserId == -1)
+            throw new Exception("You do not have Authorize..");
+
+        var result = await userRepo.GetUserByIdentifierAsync(identifier);
+        return result;
+    }
+    public async Task<int> GetUsersCountAsync(YearType? year)
+    {
+        if (CurrentUserId == -1)
+            throw new Exception("You do not have Authorize..");
+
+        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
+            throw new Exception("You do not have permission..");
+
+        return await userRepo.GetUsersCountAsync(year);
+    }
+
+    public async Task<string> CreateTokenAsync(bool isStudent, long identifier, int role /*admin\student*/)
     {
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new(ClaimTypes.NameIdentifier, userId.ToString()),
+            new(ClaimTypes.NameIdentifier, identifier.ToString()),
             new(ClaimTypes.Role, role.ToString()),
             new("role", role.ToString())
         };

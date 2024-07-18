@@ -15,9 +15,9 @@ public class WebsiteUserController : ControllerBase
         this.userService = userService;
     }
     [HttpPost]
-    public async Task<IActionResult> Add(StudentDto dto)
+    public async Task<IActionResult> Add(UserFormDto dto)
     {
-        return Ok(await userService.AddAsync(dto));
+        return Ok(await userService.SignUpAsync(dto));
     }
     [HttpGet]
     public async Task<IActionResult> GetAll()

@@ -1,8 +1,10 @@
 ﻿using FourthPro.Repository.Department;
 using FourthPro.Repository.Doctor;
+using FourthPro.Repository.Project;
 using FourthPro.Repository.User;
 using FourthPro.Service.Department;
 using FourthPro.Service.Doctor;
+using FourthPro.Service.Project;
 using FourthPro.Service.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -76,6 +78,7 @@ public static class ServiceConfig
     public static void ConfigureRepos(this IServiceCollection services)
    => services.AddScoped<IUserRepo, UserRepo>()
         .AddScoped<IDoctorRepo, DoctorRepo>()
+        .AddScoped<IProjectRepo, ProjectRepo>()
         .AddScoped<IDepartmentRepo, DepartmentRepo>()
         ;
 
@@ -83,6 +86,7 @@ public static class ServiceConfig
     public static void ConfigureServices(this IServiceCollection services)
    => services.AddScoped<IUserService, UserService>()
    .AddScoped<IDoctorService, DoctorService>()
+   .AddScoped<IProjectService, ProjectService>()
    .AddScoped<IDepartmentService, DepartmentService>()
         ;
 }

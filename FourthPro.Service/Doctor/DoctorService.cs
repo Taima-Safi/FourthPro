@@ -24,7 +24,7 @@ public class DoctorService : BaseService, IDoctorService
         if (CurrentUserId == -1)
             throw new Exception("You do not have Authorize..");
 
-        if (await userRepo.CheckIfStudentById(CurrentUserId))
+        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
             throw new Exception("You do not have permission to add doctor..");
 
         var doctorId = await doctorRepo.AddAsync(dto);
@@ -44,7 +44,7 @@ public class DoctorService : BaseService, IDoctorService
         if (CurrentUserId == -1)
             throw new Exception("You do not have Authorize..");
 
-        if (await userRepo.CheckIfStudentById(CurrentUserId))
+        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
             throw new Exception("You do not have permission to edit doctor..");
 
         if (!await doctorRepo.CheckIfExist(doctorId))
@@ -57,7 +57,7 @@ public class DoctorService : BaseService, IDoctorService
         if (CurrentUserId == -1)
             throw new Exception("You do not have Authorize..");
 
-        if (await userRepo.CheckIfStudentById(CurrentUserId))
+        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
             throw new Exception("You do not have permission to delete doctor..");
 
         if (!await doctorRepo.CheckIfExist(doctorId))
