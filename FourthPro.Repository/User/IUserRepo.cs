@@ -6,7 +6,7 @@ namespace FourthPro.Repository.User;
 
 public interface IUserRepo
 {
-    Task<int> SignUpAsync(UserFormDto dto, string hashPassword);
+    Task<Tuple<int, int>> SignUpAsync(UserFormDto dto, string hashPassword);
     Task<bool> CheckIfStudentByIdentifier(int identifier);
     Task<List<UserDto>> GetAllUser();
     Task<UserDto> GetUserByIdentifierAsync(int identifier);

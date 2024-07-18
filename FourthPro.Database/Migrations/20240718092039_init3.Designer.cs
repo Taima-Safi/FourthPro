@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FourthPro.Database.Migrations
 {
     [DbContext(typeof(FourthProDbContext))]
-    [Migration("20240717115505_init")]
-    partial class init
+    [Migration("20240718092039_init3")]
+    partial class init3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

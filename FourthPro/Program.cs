@@ -13,9 +13,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<ErrorHandlerMiddleware>();
 builder.Services.AddTransient<AuthMiddleware>();
-//builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpContextAccessor();
 #region Database
-var connectionString = builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "SomeeServer" : "SomeeServer");
+var connectionString = builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "SqlServer" : "SqlServer");
 builder.Services.AddDbContext<FourthProDbContext>(options =>
 {
     options.UseSqlServer(connectionString/*, ServerVersion.AutoDetect(connectionString)*/);

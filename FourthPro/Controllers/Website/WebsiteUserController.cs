@@ -1,5 +1,6 @@
 ﻿using FourthPro.Dto.Student;
 using FourthPro.Service.UserService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FourthPro.Controllers.Website;
@@ -14,12 +15,13 @@ public class WebsiteUserController : ControllerBase
     {
         this.userService = userService;
     }
-    [HttpPost]
+    [HttpPost, AllowAnonymous]
     public async Task<IActionResult> Add(UserFormDto dto)
     {
-        return Ok(await userService.SignUpAsync(dto));
+        var (identifier, token) = await userService.SignUpAsync(dto);
+        return Ok((identifier, token));
     }
-    [HttpGet]
+    [HttpGet, AllowAnonymous]
     public async Task<IActionResult> GetAll()
         => Ok(await userService.GetAllAsync());
 }

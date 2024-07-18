@@ -31,17 +31,17 @@ public class UserService : BaseService, IUserService
     {
         var hashPassword = HashPassword(dto.Password);
 
-        var identifier = await userRepo.SignUpAsync(dto, hashPassword);
-        var token = await CreateTokenAsync(true, identifier, 1);
-        return new(identifier, token);
+        var (id, identfier) = await userRepo.SignUpAsync(dto, hashPassword);
+        var token = await CreateTokenAsync(true, id, 1);
+        return new(identfier, token);
     }
     public async Task<List<UserDto>> GetAllAsync()
     {
-        if (CurrentUserId == -1)
-            throw new Exception("You do not have Authorize..");
+        //      if (CurrentUserId == -1)
+        //          throw new Exception("You do not have Authorize..");
 
-        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
-            throw new Exception("You do not have permission..");
+        //if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
+        //    throw new Exception("You do not have permission..");
 
         var result = await userRepo.GetAllUser();
         return result;
@@ -65,12 +65,12 @@ public class UserService : BaseService, IUserService
         return await userRepo.GetUsersCountAsync(year);
     }
 
-    public async Task<string> CreateTokenAsync(bool isStudent, long identifier, int role /*admin\student*/)
+    public async Task<string> CreateTokenAsync(bool isStudent, long id, int role /*admin\student*/)
     {
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new(ClaimTypes.NameIdentifier, identifier.ToString()),
+            new(ClaimTypes.NameIdentifier, id.ToString()),
             new(ClaimTypes.Role, role.ToString()),
             new("role", role.ToString())
         };

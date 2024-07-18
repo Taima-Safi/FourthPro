@@ -5,7 +5,7 @@
 namespace FourthPro.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class init3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -81,7 +81,6 @@ namespace FourthPro.Database.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FourthProjectId = table.Column<int>(type: "int", nullable: true),
                     FifthProjectId = table.Column<int>(type: "int", nullable: true),
-                    ProjectModelId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -98,11 +97,6 @@ namespace FourthPro.Database.Migrations
                         principalTable: "Project",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_User_Project_ProjectModelId",
-                        column: x => x.ProjectModelId,
-                        principalTable: "Project",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -124,11 +118,6 @@ namespace FourthPro.Database.Migrations
                 name: "IX_User_FourthProjectId",
                 table: "User",
                 column: "FourthProjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_ProjectModelId",
-                table: "User",
-                column: "ProjectModelId");
         }
 
         /// <inheritdoc />
