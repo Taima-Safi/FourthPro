@@ -1,4 +1,5 @@
 ﻿using FourthPro.Dto.Student;
+using FourthPro.Repository.Subject;
 using FourthPro.Repository.User;
 using FourthPro.Service.Base;
 using FourthPro.Shared.Enum;
@@ -15,23 +16,46 @@ namespace FourthPro.Service.UserService;
 public class UserService : BaseService, IUserService
 {
     private readonly IUserRepo userRepo;
+    private readonly ISubjectRepo subjectRepo;
 
     private string Key { get; set; }
     private string Issuer { get; set; }
     private string Audience { get; set; }
-    public UserService(IUserRepo userRepo, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+    public UserService(IUserRepo userRepo, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, ISubjectRepo subjectRepo)
         : base(configuration, httpContextAccessor)
     {
         this.userRepo = userRepo;
         Key = this.configuration["JwtConfig:secret"];
         Issuer = this.configuration["JwtConfig:validIssuer"];
         Audience = this.configuration["JwtConfig:validAudience"];
+        this.subjectRepo = subjectRepo;
     }
     public async Task<string> SignUpAsync(UserFormDto dto)
     {
         var hashPassword = HashPassword(dto.Password);
 
         var id = await userRepo.SignUpAsync(dto, hashPassword);
+        //TODO : Add default subjects to user (i have to know the semester)
+        //var subjects = await subjectRepo.GetAllAsync(dto.Year, );
+        //var subjects = new StudentSubjectModel();
+        //switch (dto.Year)
+        //{
+        //    case YearType.First:
+        //        subjects = new StudentSubjectModel
+        //        {
+        //            UserId = id,
+        //            SubjectId = ,
+        //        }
+        //        break;
+        //    case YearType.Second:
+        //        break;
+        //    case YearType.Third:
+        //        break;
+        //    case YearType.Fourth:
+        //        break;
+        //    case YearType.Fifth:
+        //        break;
+        //}
         var token = await CreateTokenAsync(true, id, 1);
         return token;
     }

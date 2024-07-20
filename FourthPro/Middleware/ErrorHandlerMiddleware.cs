@@ -47,6 +47,10 @@ public class ErrorHandlerMiddleware : IMiddleware
                     response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     customResponse.ErrorMessage = "Can Not Access";
                     break;
+                case InValidSizeException:
+                    response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    customResponse.ErrorMessage = "Invalid Size File";
+                    break;
                 case ValidationException:
                     // validation application error
                     response.StatusCode = (int)HttpStatusCode.BadRequest;

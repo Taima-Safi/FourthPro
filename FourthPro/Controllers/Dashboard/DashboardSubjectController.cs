@@ -1,6 +1,8 @@
 ﻿using FourthPro.Dto.Subject;
 using FourthPro.Service.Subject;
 using FourthPro.Shared.Enum;
+using FourthPro.Uploads;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FourthPro.Controllers.Dashboard;
@@ -15,10 +17,22 @@ public class DashboardSubjectController : ControllerBase
     {
         this.subjectService = subjectService;
     }
-    [HttpPost]
+    [HttpPost, AllowAnonymous]
     public async Task<IActionResult> Add(SubjectFormDto dto)
     {
         var result = await subjectService.AddAsync(dto);
+        return Ok(result);
+    }
+    [HttpGet, AllowAnonymous]
+    public async Task<IActionResult> DownloadFile(string fileName)
+    {
+        var result = await FileHelper.DownloadFile(fileName, false);
+        return File(result, "application/octet-stream");
+    }
+    [HttpGet]
+    public async Task<IActionResult> GetLastQuestionsFileNameById(int subjectId)
+    {
+        var result = await subjectService.GetLastQuestionsFileNameById(subjectId);
         return Ok(result);
     }
     [HttpGet]
@@ -49,6 +63,18 @@ public class DashboardSubjectController : ControllerBase
     public async Task<IActionResult> Remove(int subjectId)
     {
         await subjectService.RemoveAsync(subjectId);
+        return Ok();
+    }
+    [HttpPost]
+    public async Task<IActionResult> UpdateSubjectToAddFile(IFormFile file, int subjectId)
+    {
+        await subjectService.UpdateSubjectToAddFileAsync(file, subjectId);
+        return Ok();
+    }
+    [HttpPost]
+    public async Task<IActionResult> UpdateSubjectToRemoveFile(int subjectId)
+    {
+        await subjectService.UpdateSubjectToRemoveFileAsync(subjectId);
         return Ok();
     }
 }

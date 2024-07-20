@@ -1,5 +1,6 @@
 ﻿using FourthPro.Dto.Subject;
 using FourthPro.Shared.Enum;
+using Microsoft.AspNetCore.Http;
 
 namespace FourthPro.Service.Subject;
 
@@ -8,7 +9,10 @@ public interface ISubjectService
     Task<int> AddAsync(SubjectFormDto dto);
     Task<List<SubjectDto>> GetAllAsync(YearType? year, SemesterType? semester, bool? isDefault, string title);
     Task<SubjectDto> GetByIdAsync(int subjectId);
+    Task<string> GetLastQuestionsFileNameById(int subjectId);
     Task<int> GetSubjectCountAsync(YearType? year, SemesterType? semester);
     Task RemoveAsync(int subjectId);
+    Task UpdateSubjectToRemoveFileAsync(int subjectId);
     Task UpdateAsync(SubjectFormDto dto, int subjectId);
+    Task UpdateSubjectToAddFileAsync(IFormFile file, int subjectId);
 }
