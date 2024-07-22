@@ -27,17 +27,21 @@ public class FourthProDbContext : DbContext
     {
         base.OnModelCreating(builder);
 
-        // Configure the relationship between UserModel and ProjectModel
-        //builder.Entity<UserModel>()
-        //    .HasOne(u => u.FourthProject)
-        //    .WithMany(p => p.Users)
-        //    .HasForeignKey(u => u.FourthProjectId)
-        //    .OnDelete(DeleteBehavior.Restrict);
+        builder.Entity<UserModel>()
+            .HasOne(u => u.FourthProject)
+            .WithMany(p => p.Users)
+            .HasForeignKey(u => u.FourthProjectId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-        //builder.Entity<UserModel>()
-        //    .HasOne(u => u.FifthProject)
-        //    .WithMany(p => p.Users)
-        //    .HasForeignKey(u => u.FifthProjectId)
-        //    .OnDelete(DeleteBehavior.Restrict);
+        // Ignore the FifthProject navigation property to avoid conflict
+        builder.Entity<UserModel>()
+            .Ignore(u => u.FifthProject);
+
+        // Configure the relationship between UserModel and ProjectModel for FifthProject
+        builder.Entity<UserModel>()
+            .HasOne(u => u.FifthProject)
+            .WithMany()
+            .HasForeignKey(u => u.FifthProjectId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -91,6 +91,23 @@ public class SubjectRepo : ISubjectRepo
             Identifier = p.User.Identifier
         }).ToListAsync();
 
+    public async Task<List<SubjectDto>> GetNonDefaultSubjectAsync(YearType year, SemesterType semester)
+    => await context.Subject.Where(p => p.IsDefault == false && p.Year == year && p.Semester == semester)
+    .Select(p => new SubjectDto
+    {
+        Id = p.Id,
+        File = p.File,
+        Type = p.Type,
+        Title = p.Title,
+        Description = p.Description,
+        Doctor = new DoctorDto
+        {
+            Id = p.Doctor.Id,
+            Name = p.Doctor.Name,
+            Email = p.Doctor.Email,
+        }
+    }).ToListAsync();
+
     public async Task UpdateAsync(SubjectFormDto dto, int subjectId)
         => await context.Subject.Where(p => p.Id == subjectId).ExecuteUpdateAsync(p => p.SetProperty(p => p.Title, dto.Title).SetProperty(p => p.Type, dto.Type)
         .SetProperty(p => p.Description, dto.Description).SetProperty(p => p.Year, dto.Year).SetProperty(p => p.DoctorId, dto.DoctorId).SetProperty(p => p.Semester, dto.Semester)

@@ -35,7 +35,7 @@ namespace FourthPro.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Department");
+                    b.ToTable("Department", (string)null);
                 });
 
             modelBuilder.Entity("FourthPro.Database.Model.DoctorModel", b =>
@@ -59,7 +59,7 @@ namespace FourthPro.Database.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Doctor");
+                    b.ToTable("Doctor", (string)null);
                 });
 
             modelBuilder.Entity("FourthPro.Database.Model.ProjectModel", b =>
@@ -89,7 +89,7 @@ namespace FourthPro.Database.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("Project");
+                    b.ToTable("Project", (string)null);
                 });
 
             modelBuilder.Entity("FourthPro.Database.Model.StudentSubjectModel", b =>
@@ -115,7 +115,7 @@ namespace FourthPro.Database.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("StudentSubject");
+                    b.ToTable("StudentSubject", (string)null);
                 });
 
             modelBuilder.Entity("FourthPro.Database.Model.SubjectModel", b =>
@@ -154,7 +154,7 @@ namespace FourthPro.Database.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("Subject");
+                    b.ToTable("Subject", (string)null);
                 });
 
             modelBuilder.Entity("FourthPro.Database.Model.UserModel", b =>
@@ -195,7 +195,7 @@ namespace FourthPro.Database.Migrations
 
                     b.HasIndex("FourthProjectId");
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("FourthPro.Database.Model.DoctorModel", b =>

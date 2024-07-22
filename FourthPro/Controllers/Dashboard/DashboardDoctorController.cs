@@ -20,9 +20,9 @@ public class DashboardDoctorController : ControllerBase
     public async Task<IActionResult> Add(DoctorFormDto dto)
         => Ok(await doctorService.AddAsync(dto));
     [HttpGet]
-    public async Task<IActionResult> GatAll(string search)
+    public async Task<IActionResult> GatAll(string departmentName, string doctorName)
     {
-        var result = await doctorService.GetAllAsync(search);
+        var result = await doctorService.GetAllAsync(departmentName, doctorName);
         return Ok(result);
     }
     [HttpGet]
@@ -32,9 +32,9 @@ public class DashboardDoctorController : ControllerBase
         return Ok(result);
     }
     [HttpGet]
-    public async Task<IActionResult> GatDoctorCount(string search)
+    public async Task<IActionResult> GatDoctorCount(string departmentName)
     {
-        var result = await doctorService.GetDoctorsCountAsync(search);
+        var result = await doctorService.GetDoctorsCountAsync(departmentName);
         return Ok(result);
     }
     [HttpPost]

@@ -1,7 +1,6 @@
 ﻿using FourthPro.Dto.Project;
 using FourthPro.Service.Project;
 using FourthPro.Shared.Enum;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FourthPro.Controllers.Dashboard;
@@ -16,9 +15,9 @@ public class DashboardProjectController : ControllerBase
     {
         this.projectService = projectService;
     }
-    [HttpPost, AllowAnonymous]
-    public async Task<IActionResult> Add(ProjectFormDto dto)
-    => Ok(await projectService.AddAsync(dto));
+    //[HttpPost, AllowAnonymous] this for website
+    //public async Task<IActionResult> Add(ProjectFormDto dto)
+    //=> Ok(await projectService.AddAsync(dto));
     [HttpGet]
     public async Task<IActionResult> GatAll(int? fourthProjectId, int? fifthProjectId)
     {
@@ -32,9 +31,9 @@ public class DashboardProjectController : ControllerBase
         return Ok(result);
     }
     [HttpGet]
-    public async Task<IActionResult> GatDoctorCount(int? doctorId, SectionType? type, string? tool)
+    public async Task<IActionResult> GetProjectCount(int? doctorId, SectionType? departmentType, string tool)
     {
-        var result = await projectService.GetProjectCountAsync(doctorId, type, tool);
+        var result = await projectService.GetProjectCountAsync(doctorId, departmentType, tool);
         return Ok(result);
     }
     [HttpPost]

@@ -110,5 +110,5 @@ public class UserRepo : IUserRepo
         }).FirstOrDefaultAsync();
 
     public async Task<int> GetUsersCountAsync(YearType? year)
-        => await context.User.Where(u => (!year.HasValue || u.Year == year)).CountAsync();
+        => await context.User.Where(u => u.Role != 0 && (!year.HasValue || u.Year == year)).CountAsync();
 }

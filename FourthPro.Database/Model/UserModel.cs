@@ -14,9 +14,7 @@ public class UserModel
 
     public int? FourthProjectId { get; set; }
     public ProjectModel FourthProject { get; set; }
-
     public int? FifthProjectId { get; set; }
     public ProjectModel FifthProject { get; set; }
     public ICollection<StudentSubjectModel> StudentSubject { get; set; }
-
 }

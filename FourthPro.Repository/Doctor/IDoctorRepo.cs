@@ -6,7 +6,7 @@ public interface IDoctorRepo
 {
     Task<int> AddAsync(DoctorFormDto dto);
     Task<bool> CheckIfExist(int doctorId);
-    Task<List<DoctorDto>> GetAllAsync(string search);
+    Task<List<DoctorDto>> GetAllAsync(string departmentName, string doctorName);
     Task<DoctorDto> GetById(int doctorId);
     Task<int> GetDoctorsCountAsync(string search);
     Task RemoveAsync(int doctorId);

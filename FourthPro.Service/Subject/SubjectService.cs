@@ -77,6 +77,10 @@ public class SubjectService : BaseService, ISubjectService
         return await subjectRepo.GetByIdAsync(subjectId) ??
             throw new NotFoundException("Subject not found..");
     }
+    public async Task<List<SubjectDto>> GetNonDefaultSubjectAsync(YearType year, SemesterType semester)
+    {
+        return await subjectRepo.GetNonDefaultSubjectAsync(year, semester);
+    }
     public async Task<int> GetSubjectCountAsync(YearType? year, SemesterType? semester)
     {
         return await subjectRepo.GetSubjectCountAsync(year, semester);

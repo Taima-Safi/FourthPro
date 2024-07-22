@@ -36,7 +36,12 @@ public class DepartmentService : BaseService, IDepartmentService
         => await departmentRepo.GetDepartmentsCountAsync();
 
     public async Task<DepartmentDto> GetByIdAsync(int departmentId)
-    => await departmentRepo.GetByIdAsync(departmentId);
+    {
+        if (!await departmentRepo.CheckIfExist(departmentId))
+            throw new NotFoundException("Department Not found..");
+
+        return await departmentRepo.GetByIdAsync(departmentId);
+    }
 
     public async Task UpdateAsync(int departmentId, string name)
     {

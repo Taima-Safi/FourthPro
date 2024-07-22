@@ -28,10 +28,12 @@ public class ProjectService : BaseService, IProjectService
     }
     public async Task<ProjectDto> GetByIdAsync(int projectId)
     {
-        return await projectRepo.GetProjectByIdAsync(projectId) ??
+        if (!await projectRepo.CheckIfExistAsync(projectId))
             throw new NotFoundException("Project not found..");
+
+        return await projectRepo.GetProjectByIdAsync(projectId);
     }
-    public async Task<int> GetProjectCountAsync(int? doctorId, SectionType? type, string? tool)
+    public async Task<int> GetProjectCountAsync(int? doctorId, SectionType? type, string tool)
     {
         return await projectRepo.GetProjectCountAsync(doctorId, type, tool);
     }

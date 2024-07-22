@@ -26,8 +26,9 @@ public class DoctorRepo : IDoctorRepo
         await context.SaveChangesAsync();
         return doctor.Entity.Id;
     }
-    public async Task<List<DoctorDto>> GetAllAsync(string search)//filter by department name, can be null
-        => await context.Doctor.Where(d => (string.IsNullOrEmpty(search) || d.Department.Title.Contains(search))).Select(d => new DoctorDto
+    public async Task<List<DoctorDto>> GetAllAsync(string departmentName, string doctorName)//filter by department name Or/and doctor name, can be null
+        => await context.Doctor.Where(d => (string.IsNullOrEmpty(departmentName) || d.Department.Title.Contains(departmentName))
+        && (string.IsNullOrEmpty(doctorName) || d.Name.Contains(doctorName))).Select(d => new DoctorDto
         {
             Id = d.Id,
             Name = d.Name,
@@ -40,7 +41,7 @@ public class DoctorRepo : IDoctorRepo
         }).ToListAsync();
 
     public async Task<DoctorDto> GetById(int doctorId)
-        => await context.Doctor.Select(d => new DoctorDto
+        => await context.Doctor.Where(d => d.Id == doctorId).Select(d => new DoctorDto
         {
             Id = d.Id,
             Name = d.Name,

@@ -48,10 +48,14 @@ public class ProjectRepo : IProjectRepo
             }).ToListAsync();
 
     public async Task<bool> CheckIfExistAsync(int projectId)
-        => await context.Project.Where(s => s.Id == projectId).AnyAsync();
+    {
+        return await context.Project.Where(s => s.Id == projectId).AnyAsync();
+    }
 
     public async Task<ProjectDto> GetProjectByIdAsync(int projectId)
-        => await context.Project.Where(p => p.Id == projectId)
+    {
+
+        var x = await context.Project.Where(p => p.Id == projectId)
         .Select(p => new ProjectDto
         {
             Id = p.Id,
@@ -63,7 +67,8 @@ public class ProjectRepo : IProjectRepo
             {
                 Id = p.Doctor.Id,
                 Name = p.Doctor.Name
-            },
+            }
+            ,
             Users = p.Users.Select(u => new UserDto
             {
                 Name = p.Users.Select(u => u.Name).FirstOrDefault(),
@@ -71,17 +76,22 @@ public class ProjectRepo : IProjectRepo
                 Identifier = p.Users.Select(u => u.Identifier).FirstOrDefault()
             }).ToList()
         }).FirstOrDefaultAsync();
+        Console.WriteLine($" result of get{x}");
 
-    public async Task<List<UserDto>> GetProjectUsersAsync(int projectId)
-        => await context.Project.Where(p => p.Id == projectId)
-        .Select(p => new UserDto
-        {
-            Name = p.Users.Select(u => u.Name).FirstOrDefault(),
-            Email = p.Users.Select(u => u.Email).FirstOrDefault(),
-            Identifier = p.Users.Select(u => u.Identifier).FirstOrDefault()
-        }).ToListAsync();
+        return x;
+    }
 
-    public async Task<int> GetProjectCountAsync(int? doctorId, SectionType? type, string? tool)
+    //TODO
+    //public async Task<List<UserDto>> GetProjectUsersAsync(int projectId)
+    //    => await context.Project.Where(p => p.Id == projectId)
+    //    .Select(p => new UserDto
+    //    {
+    //        Name = p.Users.Select(u => u.Name).FirstOrDefault(),
+    //        Email = p.Users.Select(u => u.Email).FirstOrDefault(),
+    //        Identifier = p.Users.Select(u => u.Identifier).FirstOrDefault()
+    //    }).ToListAsync();
+
+    public async Task<int> GetProjectCountAsync(int? doctorId, SectionType? type, string tool)
     {
         return await context.Project.Where(p => (!doctorId.HasValue || p.DoctorId == doctorId) // TODO : when student add project for doctor check Count
         && (!type.HasValue || p.Type == type) && (string.IsNullOrEmpty(tool) || p.Tools.Contains(tool))).CountAsync();

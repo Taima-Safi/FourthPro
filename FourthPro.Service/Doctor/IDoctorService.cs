@@ -5,7 +5,7 @@ namespace FourthPro.Service.Doctor;
 public interface IDoctorService
 {
     Task<int> AddAsync(DoctorFormDto dto);
-    Task<List<DoctorDto>> GetAllAsync(string search);
+    Task<List<DoctorDto>> GetAllAsync(string departmentName, string doctorName);
     Task<DoctorDto> GetByIdAsync(int doctorId);
     Task<int> GetDoctorsCountAsync(string search);
     Task RemoveAsync(int doctorId);

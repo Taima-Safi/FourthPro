@@ -36,7 +36,7 @@ public class DashboardSubjectController : ControllerBase
         return Ok(result);
     }
     [HttpGet]
-    public async Task<IActionResult> GatAll(YearType? year, SemesterType? semester, bool? isDefault, string? title)
+    public async Task<IActionResult> GatAll(YearType? year, SemesterType? semester, bool? isDefault, string title)
     {
         var result = await subjectService.GetAllAsync(year, semester, isDefault, title);
         return Ok(result);

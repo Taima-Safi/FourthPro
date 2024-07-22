@@ -15,4 +15,5 @@ public interface ISubjectRepo
     Task UpdateSubjectToRemoveFileAsync(int subjectId);
     Task UpdateAsync(SubjectFormDto dto, int subjectId);
     Task UpdateSubjectToAddFileAsync(string fileName, int subjectId);
+    Task<List<SubjectDto>> GetNonDefaultSubjectAsync(YearType year, SemesterType semester);
 }
