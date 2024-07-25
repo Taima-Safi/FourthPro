@@ -1,4 +1,5 @@
 ﻿using FourthPro.Dto.Doctor;
+using FourthPro.Dto.Lecture;
 using FourthPro.Shared.Enum;
 
 namespace FourthPro.Dto.Subject;
@@ -16,5 +17,7 @@ public class SubjectDto
     // [NotMapped]
     // public IFormFile LastQuestionsFile { get; set; }
     public DoctorDto Doctor { get; set; }
-    //  public List<StudentSubjectModel> StudentSubject { get; set; }
+    //  public List<StudentSubjectModel> StudentSubject { get; set; } = new();
+    public List<LectureDto> Lectures { get; set; } = new();
+
 }

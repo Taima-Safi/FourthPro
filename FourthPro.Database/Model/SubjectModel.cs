@@ -16,6 +16,7 @@ public class SubjectModel
     // public IFormFile LastQuestionsFile { get; set; }
     public int DoctorId { get; set; }
     public DoctorModel Doctor { get; set; }
+    public ICollection<LectureModel> Lecture { get; set; }
     public ICollection<StudentSubjectModel> StudentSubject { get; set; }
 
 }

@@ -35,8 +35,8 @@ public class DoctorRepo : IDoctorRepo
             Email = d.Email,
             Department = new DepartmentDto
             {
-                Id = d.Id,
-                Title = d.Name
+                Id = d.Department.Id,
+                Title = d.Department.Title
             }
         }).ToListAsync();
 
@@ -48,8 +48,8 @@ public class DoctorRepo : IDoctorRepo
             Email = d.Email,
             Department = new DepartmentDto
             {
-                Id = d.Id,
-                Title = d.Name
+                Id = d.Department.Id,
+                Title = d.Department.Title
             }
         }).FirstOrDefaultAsync();
 
@@ -61,6 +61,6 @@ public class DoctorRepo : IDoctorRepo
 
     public async Task RemoveAsync(int doctorId)
         => await context.Doctor.Where(d => d.Id == doctorId).ExecuteDeleteAsync();
-    public async Task<bool> CheckIfExist(int doctorId)
+    public async Task<bool> CheckIfExistAsync(int doctorId)
         => await context.Doctor.Where(d => d.Id == doctorId).AnyAsync();
 }

@@ -16,6 +16,7 @@ public class FourthProDbContext : DbContext
     public DbSet<DoctorModel> Doctor { get; set; }
     public DbSet<DepartmentModel> Department { get; set; }
     public DbSet<ProjectModel> Project { get; set; }
+    public DbSet<LectureModel> Lecture { get; set; }
     public DbSet<SubjectModel> Subject { get; set; }
     public DbSet<StudentSubjectModel> StudentSubject { get; set; }
 

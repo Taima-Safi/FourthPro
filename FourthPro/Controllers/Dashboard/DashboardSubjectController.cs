@@ -1,4 +1,5 @@
-﻿using FourthPro.Dto.Subject;
+﻿using FourthPro.Dto.Lecture;
+using FourthPro.Dto.Subject;
 using FourthPro.Service.Subject;
 using FourthPro.Shared.Enum;
 using FourthPro.Uploads;
@@ -24,7 +25,7 @@ public class DashboardSubjectController : ControllerBase
         return Ok(result);
     }
     [HttpGet, AllowAnonymous]
-    public async Task<IActionResult> DownloadFile(string fileName)
+    public async Task<IActionResult> DownloadLastQuestionFile(string fileName)
     {
         var result = await FileHelper.DownloadFile(fileName, false);
         return File(result, "application/octet-stream");
@@ -77,4 +78,62 @@ public class DashboardSubjectController : ControllerBase
         await subjectService.UpdateSubjectToRemoveFileAsync(subjectId);
         return Ok();
     }
+
+    #region Lecture
+    [HttpPost]
+    public async Task<IActionResult> AddLecture(LectureFormDto dto)
+    {
+        var result = await subjectService.AddLectureAsync(dto);
+        return Ok(result);
+    }
+    [HttpGet, AllowAnonymous]
+    public async Task<IActionResult> DownloadLectureFile(string fileName)
+    {
+        var result = await FileHelper.DownloadFile(fileName, true);
+        return File(result, "application/octet-stream");
+    }
+    [HttpGet]
+    public async Task<IActionResult> GetLectureFileNameById(int lectureId)
+    {
+        var result = await subjectService.GetLectureFileNameById(lectureId);
+        return Ok(result);
+    }
+    [HttpGet]
+    public async Task<IActionResult> GatAllLecture(YearType? year, SemesterType? semester, bool? isPractice, int? subjectId, string title)
+    {
+        var result = await subjectService.GetAllLectureAsync(year, semester, isPractice, subjectId, title);
+        return Ok(result);
+    }
+    [HttpGet]
+    public async Task<IActionResult> GatLectureById(int lectureId)
+    {
+        var result = await subjectService.GetLectureByIdAsync(lectureId);
+        return Ok(result);
+    }
+    [HttpPost]
+    public async Task<IActionResult> UpdateLecture(LectureFormDto dto, int lectureId)
+    {
+        await subjectService.UpdateLectureAsync(dto, lectureId);
+        return Ok();
+    }
+    [HttpDelete]
+    public async Task<IActionResult> RemoveLecture(int lectureId)
+    {
+        await subjectService.RemoveLectureAsync(lectureId);
+        return Ok();
+    }
+    [HttpPost]
+    public async Task<IActionResult> UpdateLectureToAddFile(IFormFile file, int lectureId)
+    {
+        await subjectService.UpdateLectureToAddFileAsync(file, lectureId);
+        return Ok();
+    }
+    [HttpPost]
+    public async Task<IActionResult> UpdateLectureToRemoveFile(int lectureId)
+    {
+        await subjectService.UpdateLectureToRemoveFileAsync(lectureId);
+        return Ok();
+    }
+
+    #endregion
 }

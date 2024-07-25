@@ -44,7 +44,7 @@ public class DoctorService : BaseService, IDoctorService
         if (!userRepo.checkIfAdmin(CurrentUserId))
             throw new UnauthorizedAccessException("You do not have permission to update doctor..");
 
-        if (!await doctorRepo.CheckIfExist(doctorId))
+        if (!await doctorRepo.CheckIfExistAsync(doctorId))
             throw new NotFoundException("Doctor not found..");
 
         await doctorRepo.UpdateAsync(dto, doctorId);
@@ -57,7 +57,7 @@ public class DoctorService : BaseService, IDoctorService
         if (!userRepo.checkIfAdmin(CurrentUserId))
             throw new UnauthorizedAccessException("You do not have permission to delete doctor..");
 
-        if (!await doctorRepo.CheckIfExist(doctorId))
+        if (!await doctorRepo.CheckIfExistAsync(doctorId))
             throw new NotFoundException("Doctor not found..");
 
         await doctorRepo.RemoveAsync(doctorId);
