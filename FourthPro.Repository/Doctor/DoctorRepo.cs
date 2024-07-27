@@ -27,8 +27,9 @@ public class DoctorRepo : IDoctorRepo
         return doctor.Entity.Id;
     }
     public async Task<List<DoctorDto>> GetAllAsync(string departmentName, string doctorName)//filter by department name Or/and doctor name, can be null
-        => await context.Doctor.Where(d => (string.IsNullOrEmpty(departmentName) || d.Department.Title.Contains(departmentName))
-        && (string.IsNullOrEmpty(doctorName) || d.Name.Contains(doctorName))).Select(d => new DoctorDto
+        => await context.Doctor.Where(d => (string.IsNullOrEmpty(doctorName) || d.Name.Contains(doctorName))
+        && (string.IsNullOrEmpty(departmentName) || d.Department.Title.Contains(departmentName)))
+        .Select(d => new DoctorDto
         {
             Id = d.Id,
             Name = d.Name,

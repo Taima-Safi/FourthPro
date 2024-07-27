@@ -43,16 +43,25 @@ public class SubjectService : BaseService, ISubjectService
 
         await subjectRepo.UpdateAsync(dto, subjectId);
     }
-    public async Task UpdateSubjectToAddFileAsync(IFormFile file, int subjectId)
+    public async Task<string> UpdateSubjectToAddFileAsync(IFormFile file, int subjectId)
     {
-        if (!await subjectRepo.CheckIfExistAsync(subjectId))
-            throw new NotFoundException("Subject not found..");
-        if (file == null)
-            throw new NotFoundException("You have to add file..");
+        try
+        {
 
-        var fileName = FileHelper.UploadFile(file, false);
+            if (!await subjectRepo.CheckIfExistAsync(subjectId))
+                throw new NotFoundException("Subject not found..");
+            if (file == null)
+                throw new NotFoundException("You have to add file..");
 
-        await subjectRepo.UpdateSubjectToAddFileAsync(fileName, subjectId);
+            var fileName = FileHelper.UploadFile(file, false);
+
+            await subjectRepo.UpdateSubjectToAddFileAsync(fileName, subjectId);
+            return fileName;
+        }
+        catch
+        {
+            throw;
+        }
     }
     public async Task UpdateSubjectToRemoveFileAsync(int subjectId)
     {

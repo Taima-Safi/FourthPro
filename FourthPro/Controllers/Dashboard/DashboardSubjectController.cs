@@ -69,8 +69,8 @@ public class DashboardSubjectController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> UpdateSubjectToAddFile(IFormFile file, int subjectId)
     {
-        await subjectService.UpdateSubjectToAddFileAsync(file, subjectId);
-        return Ok();
+        var fileName = await subjectService.UpdateSubjectToAddFileAsync(file, subjectId);
+        return Ok(fileName);
     }
     [HttpPost]
     public async Task<IActionResult> UpdateSubjectToRemoveFile(int subjectId)

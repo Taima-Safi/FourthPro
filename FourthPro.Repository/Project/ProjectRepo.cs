@@ -53,9 +53,7 @@ public class ProjectRepo : IProjectRepo
     }
 
     public async Task<ProjectDto> GetProjectByIdAsync(int projectId)
-    {
-
-        var x = await context.Project.Where(p => p.Id == projectId)
+    => await context.Project.Where(p => p.Id == projectId)
         .Select(p => new ProjectDto
         {
             Id = p.Id,
@@ -76,10 +74,6 @@ public class ProjectRepo : IProjectRepo
                 Identifier = p.Users.Select(u => u.Identifier).FirstOrDefault()
             }).ToList()
         }).FirstOrDefaultAsync();
-        Console.WriteLine($" result of get{x}");
-
-        return x;
-    }
 
     //TODO
     //public async Task<List<UserDto>> GetProjectUsersAsync(int projectId)

@@ -15,7 +15,7 @@ public interface ISubjectService
     Task RemoveAsync(int subjectId);
     Task UpdateSubjectToRemoveFileAsync(int subjectId);
     Task UpdateAsync(SubjectFormDto dto, int subjectId);
-    Task UpdateSubjectToAddFileAsync(IFormFile file, int subjectId);
+    Task<string> UpdateSubjectToAddFileAsync(IFormFile file, int subjectId);
     Task<List<SubjectDto>> GetNonDefaultSubjectAsync(YearType year, SemesterType semester);
     Task<int> AddLectureAsync(LectureFormDto dto);
     Task<string> GetLectureFileNameById(int lectureId);

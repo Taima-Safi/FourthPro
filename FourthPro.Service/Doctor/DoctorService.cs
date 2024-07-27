@@ -31,7 +31,7 @@ public class DoctorService : BaseService, IDoctorService
         return doctorId;
     }
     public async Task<List<DoctorDto>> GetAllAsync(string departmentName, string doctorName)//filter by department name Or/and doctor name, can be null
-    => await doctorRepo.GetAllAsync(departmentName, departmentName);
+    => await doctorRepo.GetAllAsync(departmentName, doctorName);
 
     public async Task<int> GetDoctorsCountAsync(string search)//filter by department name, can be null
         => await doctorRepo.GetDoctorsCountAsync(search);

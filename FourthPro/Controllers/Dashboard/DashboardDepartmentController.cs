@@ -16,7 +16,10 @@ public class DashboardDepartmentController : ControllerBase
     }
     [HttpPost, AllowAnonymous]
     public async Task<IActionResult> Add(string name)
-     => Ok(await departmentService.AddAsync(name));
+    {
+        var departmentId = await departmentService.AddAsync(name);
+        return Ok(departmentId);
+    }
     [HttpGet]
     public async Task<IActionResult> GatAll()
     {

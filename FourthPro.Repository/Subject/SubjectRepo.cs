@@ -172,7 +172,17 @@ public class SubjectRepo : ISubjectRepo
                 Id = s.Id,
                 File = s.File,
                 Title = s.Title,
-                IsPractical = s.IsPractical
+                IsPractical = s.IsPractical,
+                Subject = new SubjectDto
+                {
+                    Id = s.Subject.Id,
+                    Year = s.Subject.Year,
+                    Type = s.Subject.Type,
+                    Title = s.Subject.Title,
+                    Semester = s.Subject.Semester,
+                    IsDefault = s.Subject.IsDefault,
+                    Description = s.Subject.Description,
+                }
             }).ToListAsync();
 
     public async Task<LectureDto> GetLectureByIdAsync(int lectureId)
@@ -182,7 +192,17 @@ public class SubjectRepo : ISubjectRepo
             Id = s.Id,
             File = s.File,
             Title = s.Title,
-            IsPractical = s.IsPractical
+            IsPractical = s.IsPractical,
+            Subject = new SubjectDto
+            {
+                Id = s.Subject.Id,
+                Year = s.Subject.Year,
+                Type = s.Subject.Type,
+                Title = s.Subject.Title,
+                Semester = s.Subject.Semester,
+                IsDefault = s.Subject.IsDefault,
+                Description = s.Subject.Description,
+            }
         }).FirstOrDefaultAsync();
 
     public async Task RemoveLectureAsync(int lectureId)

@@ -20,7 +20,7 @@ public class DashboardDoctorController : ControllerBase
     public async Task<IActionResult> Add(DoctorFormDto dto)
         => Ok(await doctorService.AddAsync(dto));
     [HttpGet]
-    public async Task<IActionResult> GatAll(string departmentName, string doctorName)
+    public async Task<IActionResult> GetAll(string departmentName, string doctorName)
     {
         var result = await doctorService.GetAllAsync(departmentName, doctorName);
         return Ok(result);

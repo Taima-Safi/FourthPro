@@ -2,6 +2,7 @@ using FourthPro.Config;
 using FourthPro.Database.Context;
 using FourthPro.Middleware;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,10 +16,10 @@ builder.Services.AddTransient<ErrorHandlerMiddleware>();
 //builder.Services.AddTransient<AuthMiddleware>();
 builder.Services.AddHttpContextAccessor();
 #region Database
-var connectionString = builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "SqlServer" : "SqlServer");
+var connectionString = builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "ServerTest" : "ServerTest");
 builder.Services.AddDbContext<FourthProDbContext>(options =>
 {
-    options.UseSqlServer(connectionString/*, ServerVersion.AutoDetect(connectionString)*/);
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 #endregion
 
@@ -51,6 +52,14 @@ app.UseCors(cors => cors
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSwagger();
+
+app.UseSwagger();
+app.UseSwaggerUI(s =>
+{
+    s.DocExpansion(DocExpansion.None);
+    s.DisplayRequestDuration();
+    s.EnableTryItOutByDefault();
+});
 app.UseRouting();
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
