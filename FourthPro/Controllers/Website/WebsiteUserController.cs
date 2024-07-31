@@ -21,6 +21,19 @@ public class WebsiteUserController : ControllerBase
         var token = await userService.SignUpAsync(dto);
         return Ok(token);
     }
+    [HttpPost, AllowAnonymous]
+    public async Task<IActionResult> LogIn(int identifier, string password)
+    {
+        var token = await userService.SignInAsync(identifier, password);
+        return Ok(token);
+    }
+
+    [HttpPut, AllowAnonymous]
+    public new async Task<IActionResult> SignOut()
+    {
+        await userService.SignOutAsync();
+        return Ok();
+    }
     [HttpGet, AllowAnonymous]
     public async Task<IActionResult> GetAll()
         => Ok(await userService.GetAllAsync());

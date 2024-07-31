@@ -20,6 +20,13 @@ public class DepartmentService : BaseService, IDepartmentService
     }
     public async Task<int> AddAsync(string name)
     {
+        var x = await userRepo.GetUserTokenActiveAsync(CurrentUserId);
+        if (x == null)
+            throw new UnauthorizedAccessException("You do not have Authorize..");
+
+        if (x.User.Role != Shared.Enum.RoleType.Admin)
+            throw new UnauthorizedAccessException("You do not have permission to add department..");
+
         if (CurrentUserId == -1)
             throw new AccessViolationException("You do not have Authorize..");
 
@@ -48,7 +55,7 @@ public class DepartmentService : BaseService, IDepartmentService
         if (CurrentUserId == -1)
             throw new AccessViolationException("You do not have Authorize..");
 
-        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
+        if (await userRepo.CheckIfStudentByIdentifierAsync(CurrentUserId))
             throw new UnauthorizedAccessException("You do not have permission to edit department..");
 
         if (!await departmentRepo.CheckIfExist(departmentId))
@@ -61,7 +68,7 @@ public class DepartmentService : BaseService, IDepartmentService
         if (CurrentUserId == -1)
             throw new AccessViolationException("You do not have Authorize..");
 
-        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
+        if (await userRepo.CheckIfStudentByIdentifierAsync(CurrentUserId))
             throw new UnauthorizedAccessException("You do not have permission to delete department..");
 
         if (!await departmentRepo.CheckIfExist(departmentId))

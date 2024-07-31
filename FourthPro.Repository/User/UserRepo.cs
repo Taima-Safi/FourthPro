@@ -24,14 +24,35 @@ public class UserRepo : IUserRepo
             Role = dto.Role,
             Year = dto.Year,
             Email = dto.Email,
-            Password = hashPassword,
+            HashedPassword = hashPassword,
             Identifier = dto.Identifier
         });
         await context.SaveChangesAsync();
         return user.Entity.Id;
     }
-    public async Task<bool> CheckIfStudentByIdentifier(int id)
+    public async Task AddTokenAsync(string token, int userId)
+    {
+        await context.UserToken.AddAsync(new UserTokenModel
+        {
+            Token = token,
+            UserId = userId,
+            IsActive = true
+        });
+        await context.SaveChangesAsync();
+    }
+    public async Task<UserTokenModel> GetUserTokenActiveAsync(int userId) => await context.UserToken.Where(t => t.UserId == userId && t.IsActive == true).FirstOrDefaultAsync();
+    public async Task RemoveUserTokenAsync(int userId)
+    => await context.UserToken.Where(t => t.UserId == userId).ExecuteUpdateAsync(t => t.SetProperty(t => t.IsActive, false));
+    public async Task RemoveTokenAsync(string token)
+    {
+        await context.UserToken.Where(t => t.Token == token).ExecuteUpdateAsync(t => t.SetProperty(t => t.IsActive, false));
+    }
+
+    public async Task<bool> CheckIfStudentByIdentifierAsync(int id)
         => await context.User.AnyAsync(u => u.Id == id && u.Identifier != 0);
+
+    public async Task<bool> CheckIfExistAsync(int identifier)
+        => await context.User.AnyAsync(u => u.Identifier == identifier);
 
     public bool checkIfAdmin(int id)
     {
@@ -62,6 +83,9 @@ public class UserRepo : IUserRepo
             Year = u.Year,
             Role = u.Role
         }).FirstOrDefaultAsync();
+
+    public async Task<UserModel> GetUserModelAsync(int identifier)
+        => await context.User.Where(u => u.Identifier == identifier).FirstOrDefaultAsync();
 
     public async Task<UserDto> GetUserByIdentifierAsync(int identifier)
         => await context.User.Where(u => u.Identifier == identifier).Select(u => new UserDto
@@ -111,4 +135,9 @@ public class UserRepo : IUserRepo
 
     public async Task<int> GetUsersCountAsync(YearType? year)
         => await context.User.Where(u => u.Role != 0 && (!year.HasValue || u.Year == year)).CountAsync();
+
+    public async Task ChangePasswordAsync(string newHashPassword, long id)
+    => await context.User.Where(u => u.Id == id)
+    .ExecuteUpdateAsync(u => u.SetProperty(u => u.HashedPassword, newHashPassword));
+
 }

@@ -14,10 +14,11 @@ public class FourthProDbContext : DbContext
     }
     public DbSet<UserModel> User { get; set; }
     public DbSet<DoctorModel> Doctor { get; set; }
-    public DbSet<DepartmentModel> Department { get; set; }
+    public DbSet<SubjectModel> Subject { get; set; }
     public DbSet<ProjectModel> Project { get; set; }
     public DbSet<LectureModel> Lecture { get; set; }
-    public DbSet<SubjectModel> Subject { get; set; }
+    public DbSet<UserTokenModel> UserToken { get; set; }
+    public DbSet<DepartmentModel> Department { get; set; }
     public DbSet<StudentSubjectModel> StudentSubject { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -27,6 +28,12 @@ public class FourthProDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder builder) // for relations
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<UserTokenModel>()
+            .HasOne(u => u.User)
+            .WithMany(p => p.UserTokens)
+            .HasForeignKey(u => u.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Entity<UserModel>()
             .HasOne(u => u.FourthProject)
