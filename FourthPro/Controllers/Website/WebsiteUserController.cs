@@ -34,7 +34,7 @@ public class WebsiteUserController : ControllerBase
         await userService.SignOutAsync();
         return Ok();
     }
-    [HttpGet, AllowAnonymous]
-    public async Task<IActionResult> GetAll()
-        => Ok(await userService.GetAllAsync());
+    //[HttpGet, AllowAnonymous]
+    //public async Task<IActionResult> GetAll()
+    //    => Ok(await userService.GetAllAsync());
 }

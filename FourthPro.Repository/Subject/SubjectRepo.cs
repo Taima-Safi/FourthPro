@@ -130,6 +130,16 @@ public class SubjectRepo : ISubjectRepo
     public async Task UpdateSubjectToRemoveFileAsync(int subjectId)
         => await context.Subject.Where(p => p.Id == subjectId).ExecuteUpdateAsync(p => p.SetProperty(p => p.File, ""));
 
+    public async Task SelectFromOptionalSubjectsAsync(int subjectId, int userId)
+    {
+        await context.StudentSubject.AddAsync(new StudentSubjectModel
+        {
+            UserId = userId,
+            SubjectId = subjectId,
+        });
+        await context.SaveChangesAsync();
+    }
+
     public async Task RemoveAsync(int subjectId)
         => await context.Subject.Where(p => p.Id == subjectId).ExecuteDeleteAsync();
     #endregion

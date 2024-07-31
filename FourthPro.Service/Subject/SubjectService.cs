@@ -70,6 +70,11 @@ public class SubjectService : BaseService, ISubjectService
 
         await subjectRepo.UpdateSubjectToRemoveFileAsync(subjectId);
     }
+    public async Task SelectFromOptionalSubjectsAsync(int subjectId)
+    {
+
+        await subjectRepo.SelectFromOptionalSubjectsAsync(subjectId, CurrentUserId);
+    }
     public async Task<string> GetLastQuestionsFileNameById(int subjectId)
     {
         if (!await subjectRepo.CheckIfExistAsync(subjectId))
@@ -81,7 +86,7 @@ public class SubjectService : BaseService, ISubjectService
 
         return fileName;
     }
-    public async Task<List<SubjectDto>> GetAllAsync(YearType? year, SemesterType? semester, bool? isDefault, string? title)
+    public async Task<List<SubjectDto>> GetAllAsync(YearType? year, SemesterType? semester, bool? isDefault, string title)
     {
         return await subjectRepo.GetAllAsync(year, semester, isDefault, title);
     }
