@@ -16,10 +16,10 @@ builder.Services.AddTransient<ErrorHandlerMiddleware>();
 //builder.Services.AddTransient<AuthMiddleware>();
 builder.Services.AddHttpContextAccessor();
 #region Database
-var connectionString = builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "ServerTest" : "ServerTest");
+var connectionString = builder.Configuration.GetConnectionString(builder.Environment.IsProduction() ? "SomeeServer" : "SomeeServer");
 builder.Services.AddDbContext<FourthProDbContext>(options =>
 {
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+    options.UseSqlServer(connectionString/*, ServerVersion.AutoDetect(connectionString)*/);
 });
 #endregion
 
