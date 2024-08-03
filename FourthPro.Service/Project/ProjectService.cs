@@ -1,4 +1,5 @@
 ﻿using FourthPro.Dto.Project;
+using FourthPro.Repository.Doctor;
 using FourthPro.Repository.Project;
 using FourthPro.Service.Base;
 using FourthPro.Shared.Enum;
@@ -11,20 +12,27 @@ namespace FourthPro.Service.Project;
 public class ProjectService : BaseService, IProjectService
 {
     private readonly IProjectRepo projectRepo;
+    private readonly IDoctorRepo doctorRepo;
 
-    public ProjectService(IProjectRepo projectRepo, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+    public ProjectService(IProjectRepo projectRepo, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDoctorRepo doctorRepo)
         : base(configuration, httpContextAccessor)
     {
         this.projectRepo = projectRepo;
+        this.doctorRepo = doctorRepo;
     }
     public async Task<int> AddAsync(ProjectFormDto dto)
     {
+        await doctorRepo.GetDoctorsCountAsync
         return await projectRepo.AddAsync(dto);
     }
 
     public async Task<List<ProjectDto>> GetAllAsync(int? fourthProject, int? fifthProject)
     {
         return await projectRepo.GetAllAsync(fourthProject, fifthProject);
+    }
+    public async Task<List<ProjectDto>> GetUserProjectsAsync()
+    {
+        return await projectRepo.GetUserProjectsAsync(CurrentUserId);
     }
     public async Task<ProjectDto> GetByIdAsync(int projectId)
     {

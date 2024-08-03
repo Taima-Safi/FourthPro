@@ -57,6 +57,9 @@ public class DoctorRepo : IDoctorRepo
     public async Task<int> GetDoctorsCountAsync(string search)//filter by department name, can be null
     => await context.Doctor.Where(d => (string.IsNullOrEmpty(search) || d.Department.Title.Contains(search))).CountAsync();
 
+    public async Task<int> GetDoctorProjectCountAsync()
+    => await context.Doctor.Where(d => d.Projects.Any(p => p.Date.Year < DateTime.UtcNow.Year && p.Date.Date >)).CountAsync();
+
     public async Task UpdateAsync(DoctorFormDto dto, int doctorId)
         => await context.Doctor.Where(d => d.Id == doctorId).ExecuteUpdateAsync(d => d.SetProperty(d => d.Email, dto.Email).SetProperty(d => d.DepartmentId, dto.DepartmentId).SetProperty(d => d.Name, dto.Name));
 

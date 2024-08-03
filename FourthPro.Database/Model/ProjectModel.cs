@@ -11,6 +11,7 @@ public class ProjectModel
     public string Description { get; set; }
     public string Tools { get; set; }
     public SectionType Type { get; set; }
+    public DateTime Date { get; set; }
     public int DoctorId { get; set; }
     public DoctorModel Doctor { get; set; }
     [NotMapped]

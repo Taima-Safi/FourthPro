@@ -10,6 +10,8 @@ public interface IProjectRepo
     Task<List<ProjectDto>> GetAllAsync(int? fourthProjectId, int? fifthProjectId);
     Task<ProjectDto> GetProjectByIdAsync(int projectId);
     Task<int> GetProjectCountAsync(int? doctorId, SectionType? type, string tool);
+    Task<List<ProjectDto>> GetUserProjectsAsync(int userId);
+
     //Task<List<UserDto>> GetProjectUsersAsync(int projectId);
     Task RemoveAsync(int projectId);
     Task UpdateAsync(ProjectFormDto dto, int projectId);

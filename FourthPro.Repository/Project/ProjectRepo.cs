@@ -23,6 +23,7 @@ public class ProjectRepo : IProjectRepo
             Type = dto.Type,
             Title = dto.Title,
             Tools = dto.Tools,
+            Date = DateTime.UtcNow,
             DoctorId = dto.DoctorId,
             Description = dto.Description
         });
@@ -37,6 +38,7 @@ public class ProjectRepo : IProjectRepo
             {
                 Id = p.Id,
                 Type = p.Type,
+                Date = p.Date,
                 Title = p.Title,
                 Tools = p.Tools,
                 Description = p.Description,
@@ -45,6 +47,29 @@ public class ProjectRepo : IProjectRepo
                     Id = p.Doctor.Id,
                     Name = p.Doctor.Name
                 }
+            }).ToListAsync();
+
+    public async Task<List<ProjectDto>> GetUserProjectsAsync(int userId)
+        => await context.Project.Where(u => u.Users.Any(u => u.Id == userId))
+            .Select(p => new ProjectDto
+            {
+                Id = p.Id,
+                Type = p.Type,
+                Date = p.Date,
+                Title = p.Title,
+                Tools = p.Tools,
+                Description = p.Description,
+                Doctor = new DoctorDto
+                {
+                    Id = p.Doctor.Id,
+                    Name = p.Doctor.Name
+                },
+                Users = p.Users.Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    Identifier = u.Identifier
+                }).ToList()
             }).ToListAsync();
 
     public async Task<bool> CheckIfExistAsync(int projectId)
@@ -58,6 +83,7 @@ public class ProjectRepo : IProjectRepo
         {
             Id = p.Id,
             Type = p.Type,
+            Date = p.Date,
             Title = p.Title,
             Tools = p.Tools,
             Description = p.Description,
