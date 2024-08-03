@@ -40,7 +40,8 @@ public class UserRepo : IUserRepo
         });
         await context.SaveChangesAsync();
     }
-    public async Task<UserTokenModel> GetUserTokenActiveAsync(int userId) => await context.UserToken.Where(t => t.UserId == userId && t.IsActive == true).FirstOrDefaultAsync();
+    public async Task<UserTokenModel> GetUserTokenActiveAsync(int userId) => await context.UserToken
+        .Where(t => t.UserId == userId && t.IsActive == true).Include(u => u.User).FirstOrDefaultAsync();
     public async Task RemoveUserTokenAsync(int userId)
     => await context.UserToken.Where(t => t.UserId == userId).ExecuteUpdateAsync(t => t.SetProperty(t => t.IsActive, false));
     public async Task RemoveTokenAsync(string token)
