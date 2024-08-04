@@ -1,5 +1,6 @@
 ﻿using FourthPro.Dto.Project;
 using FourthPro.Service.Project;
+using FourthPro.Shared.Enum;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FourthPro.Controllers.Website;
@@ -15,8 +16,9 @@ public class WebsiteProjectController : ControllerBase
         this.projectService = projectService;
     }
     [HttpPost]
-    public async Task<IActionResult> Add(ProjectFormDto dto)
-    => Ok(await projectService.AddAsync(dto));
+    public async Task<IActionResult> Add(ProjectFormDto dto, SemesterType semester)
+    => Ok(await projectService.AddAsync(dto, semester));
+
     public async Task<IActionResult> GatById(int projectId)
     {
         var result = await projectService.GetByIdAsync(projectId);

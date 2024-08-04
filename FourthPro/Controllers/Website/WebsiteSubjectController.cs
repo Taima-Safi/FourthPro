@@ -19,7 +19,7 @@ public class WebsiteSubjectController : ControllerBase
     [HttpGet, AllowAnonymous]
     public async Task<IActionResult> DownloadLastQuestionFile(string fileName)
     {
-        var result = await FileHelper.DownloadFile(fileName, false);
+        var result = await FileHelper.DownloadFile(fileName, FileType.LastQuestionsFile);
         return File(result, "application/octet-stream");
     }
     [HttpGet]
@@ -49,7 +49,7 @@ public class WebsiteSubjectController : ControllerBase
     [HttpGet, AllowAnonymous]
     public async Task<IActionResult> DownloadLectureFile(string fileName)
     {
-        var result = await FileHelper.DownloadFile(fileName, true);
+        var result = await FileHelper.DownloadFile(fileName, FileType.Lecture);
         return File(result, "application/octet-stream");
     }
     [HttpGet]

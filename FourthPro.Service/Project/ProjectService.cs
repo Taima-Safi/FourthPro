@@ -4,6 +4,7 @@ using FourthPro.Repository.Project;
 using FourthPro.Service.Base;
 using FourthPro.Shared.Enum;
 using FourthPro.Shared.Exception;
+using FourthPro.Uploads;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
@@ -20,9 +21,18 @@ public class ProjectService : BaseService, IProjectService
         this.projectRepo = projectRepo;
         this.doctorRepo = doctorRepo;
     }
-    public async Task<int> AddAsync(ProjectFormDto dto)
+    public async Task<int> AddAsync(ProjectFormDto dto, SemesterType semester)
     {
-        await doctorRepo.GetDoctorsCountAsync
+        if (!await doctorRepo.CheckIfExistAsync(dto.DoctorId))
+            throw new NotFoundException("Doctor not found..");
+
+        if (await doctorRepo.GetDoctorProjectCountAsync(semester) >= 6)
+            throw new NotFoundException("This doctor has the maximum count of Projects for this year");
+
+        string fileName = null;
+        if (dto.File != null)
+            fileName = FileHelper.UploadFile(dto.File, FileType.Project);
+
         return await projectRepo.AddAsync(dto);
     }
 

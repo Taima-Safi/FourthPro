@@ -29,7 +29,7 @@ public class SubjectService : BaseService, ISubjectService
 
         string fileName = null;
         if (dto.LastQuestionsFile != null)
-            fileName = FileHelper.UploadFile(dto.LastQuestionsFile, false);
+            fileName = FileHelper.UploadFile(dto.LastQuestionsFile, FileType.LastQuestionsFile);
 
         return await subjectRepo.AddAsync(dto, fileName);
     }
@@ -53,7 +53,7 @@ public class SubjectService : BaseService, ISubjectService
             if (file == null)
                 throw new NotFoundException("You have to add file..");
 
-            var fileName = FileHelper.UploadFile(file, false);
+            var fileName = FileHelper.UploadFile(file, FileType.LastQuestionsFile);
 
             await subjectRepo.UpdateSubjectToAddFileAsync(fileName, subjectId);
             return fileName;
@@ -119,7 +119,7 @@ public class SubjectService : BaseService, ISubjectService
 
         string fileName = null;
         if (dto.LectureFile != null)
-            fileName = FileHelper.UploadFile(dto.LectureFile, true);
+            fileName = FileHelper.UploadFile(dto.LectureFile, FileType.Lecture);
 
         return await subjectRepo.AddLectureAsync(dto, fileName);
     }
@@ -151,7 +151,7 @@ public class SubjectService : BaseService, ISubjectService
         if (file == null)
             throw new NotFoundException("You have to add file..");
 
-        var fileName = FileHelper.UploadFile(file, false);
+        var fileName = FileHelper.UploadFile(file, FileType.Lecture);
 
         await subjectRepo.UpdateLectureToAddFileAsync(fileName, lectureId);
     }

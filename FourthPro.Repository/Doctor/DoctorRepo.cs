@@ -2,6 +2,7 @@
 using FourthPro.Database.Model;
 using FourthPro.Dto.Department;
 using FourthPro.Dto.Doctor;
+using FourthPro.Shared.Enum;
 using Microsoft.EntityFrameworkCore;
 
 namespace FourthPro.Repository.Doctor;
@@ -57,8 +58,16 @@ public class DoctorRepo : IDoctorRepo
     public async Task<int> GetDoctorsCountAsync(string search)//filter by department name, can be null
     => await context.Doctor.Where(d => (string.IsNullOrEmpty(search) || d.Department.Title.Contains(search))).CountAsync();
 
-    public async Task<int> GetDoctorProjectCountAsync()
-    => await context.Doctor.Where(d => d.Projects.Any(p => p.Date.Year < DateTime.UtcNow.Year && p.Date.Date >)).CountAsync();
+    public async Task<int> GetDoctorProjectCountAsync(SemesterType semester)
+    {
+        DateTime semesterDate = new();
+        if (DateTime.UtcNow.Month < 1)
+            semesterDate = DateTime.Parse($"1/11/{DateTime.UtcNow.Year}");
+        else
+            semesterDate = DateTime.Parse($"1/11{DateTime.UtcNow.Year - 1}");
+
+        return await context.Doctor.Where(d => d.Projects.Where(p => p.Semester == semester).Any(p => p.Date.Date > semesterDate && p.Date.Date < DateTime.UtcNow)).CountAsync();
+    }
 
     public async Task UpdateAsync(DoctorFormDto dto, int doctorId)
         => await context.Doctor.Where(d => d.Id == doctorId).ExecuteUpdateAsync(d => d.SetProperty(d => d.Email, dto.Email).SetProperty(d => d.DepartmentId, dto.DepartmentId).SetProperty(d => d.Name, dto.Name));

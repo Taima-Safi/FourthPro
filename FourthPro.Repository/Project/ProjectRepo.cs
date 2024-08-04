@@ -20,6 +20,8 @@ public class ProjectRepo : IProjectRepo
     {
         var project = await context.Project.AddAsync(new ProjectModel
         {
+            Url = dto.Url,
+            File = dto.File,
             Type = dto.Type,
             Title = dto.Title,
             Tools = dto.Tools,
@@ -37,8 +39,10 @@ public class ProjectRepo : IProjectRepo
             .Select(p => new ProjectDto
             {
                 Id = p.Id,
+                Url = p.Url,
                 Type = p.Type,
                 Date = p.Date,
+                File = p.File,
                 Title = p.Title,
                 Tools = p.Tools,
                 Description = p.Description,
@@ -54,7 +58,9 @@ public class ProjectRepo : IProjectRepo
             .Select(p => new ProjectDto
             {
                 Id = p.Id,
+                Url = p.Url,
                 Type = p.Type,
+                File = p.File,
                 Date = p.Date,
                 Title = p.Title,
                 Tools = p.Tools,
@@ -82,7 +88,9 @@ public class ProjectRepo : IProjectRepo
         .Select(p => new ProjectDto
         {
             Id = p.Id,
+            Url = p.Url,
             Type = p.Type,
+            File = p.File,
             Date = p.Date,
             Title = p.Title,
             Tools = p.Tools,
