@@ -61,12 +61,12 @@ public class DoctorRepo : IDoctorRepo
     public async Task<int> GetDoctorProjectCountAsync(SemesterType semester)
     {
         DateTime semesterDate = new();
-        if (DateTime.UtcNow.Month < 1)
-            semesterDate = DateTime.Parse($"1/11/{DateTime.UtcNow.Year}");
+        if (DateTime.UtcNow.Month > 11 && DateTime.UtcNow.Month < 2)//first semester
+            semesterDate = DateTime.Parse($"11/1/{DateTime.UtcNow.Year}"); // month/day/year
         else
-            semesterDate = DateTime.Parse($"1/11{DateTime.UtcNow.Year - 1}");
+            semesterDate = DateTime.Parse($"11/1/{DateTime.UtcNow.Year - 1}");
 
-        return await context.Doctor.Where(d => d.Projects.Where(p => p.Semester == semester).Any(p => p.Date.Date > semesterDate && p.Date.Date < DateTime.UtcNow)).CountAsync();
+        return await context.Project.Where(d => d.DoctorId == 1 && d.Date.Date > semesterDate && d.Date.Date < DateTime.UtcNow).CountAsync();
     }
 
     public async Task UpdateAsync(DoctorFormDto dto, int doctorId)

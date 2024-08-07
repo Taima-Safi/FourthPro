@@ -16,12 +16,12 @@ public class ProjectRepo : IProjectRepo
     {
         this.context = context;
     }
-    public async Task<int> AddAsync(ProjectFormDto dto)
+    public async Task<int> AddAsync(ProjectFormDto dto, string fileName)
     {
         var project = await context.Project.AddAsync(new ProjectModel
         {
             Url = dto.Url,
-            File = dto.File,
+            File = fileName,
             Type = dto.Type,
             Title = dto.Title,
             Tools = dto.Tools,
@@ -33,9 +33,8 @@ public class ProjectRepo : IProjectRepo
         return project.Entity.Id;
     }
 
-    public async Task<List<ProjectDto>> GetAllAsync(int? fourthProjectId, int? fifthProjectId) // with filter for year
-        => await context.Project.Where(u => (!fourthProjectId.HasValue || u.Users.Select(u => u.FourthProjectId).FirstOrDefault() == fourthProjectId)
-        && (!fifthProjectId.HasValue || u.Users.Select(u => u.FifthProjectId).FirstOrDefault() == fifthProjectId))
+    public async Task<List<ProjectDto>> GetAllAsync(SectionType? type, DateTime? date)
+        => await context.Project.Where(u => (!type.HasValue || u.Type == type) && (!date.HasValue || u.Date.Date == date))
             .Select(p => new ProjectDto
             {
                 Id = p.Id,
@@ -50,7 +49,12 @@ public class ProjectRepo : IProjectRepo
                 {
                     Id = p.Doctor.Id,
                     Name = p.Doctor.Name
-                }
+                },
+                Users = p.Users.Select(u => new UserDto
+                {
+                    Name = u.Name,
+                    Identifier = u.Identifier
+                }).ToList()
             }).ToListAsync();
 
     public async Task<List<ProjectDto>> GetUserProjectsAsync(int userId)
@@ -82,6 +86,8 @@ public class ProjectRepo : IProjectRepo
     {
         return await context.Project.Where(s => s.Id == projectId).AnyAsync();
     }
+    public async Task<string> GetProjectFileNameByIdAsync(int projectId)
+    => await context.Project.Where(s => s.Id == projectId).Select(s => s.File).FirstOrDefaultAsync();
 
     public async Task<ProjectDto> GetProjectByIdAsync(int projectId)
     => await context.Project.Where(p => p.Id == projectId)

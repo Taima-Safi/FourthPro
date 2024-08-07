@@ -1,6 +1,8 @@
 ﻿using FourthPro.Dto.Project;
 using FourthPro.Service.Project;
 using FourthPro.Shared.Enum;
+using FourthPro.Uploads;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FourthPro.Controllers.Website;
@@ -19,6 +21,19 @@ public class WebsiteProjectController : ControllerBase
     public async Task<IActionResult> Add(ProjectFormDto dto, SemesterType semester)
     => Ok(await projectService.AddAsync(dto, semester));
 
+    [HttpGet, AllowAnonymous]
+    public async Task<IActionResult> DownloadProjectFile(string fileName)
+    {
+        var result = await FileHelper.DownloadFile(fileName, FileType.Project);
+        return File(result, "application/octet-stream");
+    }
+    [HttpGet]
+    public async Task<IActionResult> GetProjectFileNameById(int projectId)
+    {
+        var result = await projectService.GetProjectFileNameByIdAsync(projectId);
+        return Ok(result);
+    }
+    [HttpGet]
     public async Task<IActionResult> GatById(int projectId)
     {
         var result = await projectService.GetByIdAsync(projectId);
@@ -31,9 +46,9 @@ public class WebsiteProjectController : ControllerBase
         return Ok();
     }
     [HttpGet]
-    public async Task<IActionResult> GatAll(int? fourthProjectId, int? fifthProjectId)
+    public async Task<IActionResult> GetAll(SectionType? type, DateTime? date)
     {
-        var result = await projectService.GetAllAsync(fourthProjectId, fifthProjectId);
+        var result = await projectService.GetAllAsync(type, date);
         return Ok(result);
     }
     [HttpGet]

@@ -25,7 +25,7 @@ public class ProjectService : BaseService, IProjectService
     {
         if (!await doctorRepo.CheckIfExistAsync(dto.DoctorId))
             throw new NotFoundException("Doctor not found..");
-
+        var x = await doctorRepo.GetDoctorProjectCountAsync(semester);
         if (await doctorRepo.GetDoctorProjectCountAsync(semester) >= 6)
             throw new NotFoundException("This doctor has the maximum count of Projects for this year");
 
@@ -33,16 +33,27 @@ public class ProjectService : BaseService, IProjectService
         if (dto.File != null)
             fileName = FileHelper.UploadFile(dto.File, FileType.Project);
 
-        return await projectRepo.AddAsync(dto);
+        return await projectRepo.AddAsync(dto, fileName);
     }
 
-    public async Task<List<ProjectDto>> GetAllAsync(int? fourthProject, int? fifthProject)
+    public async Task<List<ProjectDto>> GetAllAsync(SectionType? type, DateTime? date)
     {
-        return await projectRepo.GetAllAsync(fourthProject, fifthProject);
+        return await projectRepo.GetAllAsync(type, date);
     }
     public async Task<List<ProjectDto>> GetUserProjectsAsync()
     {
         return await projectRepo.GetUserProjectsAsync(CurrentUserId);
+    }
+    public async Task<string> GetProjectFileNameByIdAsync(int projectId)
+    {
+        if (!await projectRepo.CheckIfExistAsync(projectId))
+            throw new NotFoundException("Project not found..");
+
+        var fileName = await projectRepo.GetProjectFileNameByIdAsync(projectId);
+        if (string.IsNullOrEmpty(fileName))
+            throw new NotFoundException("This project does not have file");
+
+        return fileName;
     }
     public async Task<ProjectDto> GetByIdAsync(int projectId)
     {

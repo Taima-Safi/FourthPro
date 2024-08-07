@@ -36,6 +36,9 @@ public class UserService : BaseService, IUserService
     {
         var hashPassword = HashPassword(dto.Password);
 
+        if (await userRepo.CheckIfExistAsync(dto.Identifier))
+            throw new AlreadyExistException("university number (Identifier) is already exist..");
+
         var userId = await userRepo.SignUpAsync(dto, hashPassword);
         //TODO : Add default subjects to user (i have to know the semester)
         //var subjects = await subjectRepo.GetAllAsync(dto.Year, );
