@@ -52,6 +52,7 @@ public class ProjectRepo : IProjectRepo
                 },
                 Users = p.Users.Select(u => new UserDto
                 {
+                    Id = u.Id,
                     Name = u.Name,
                     Identifier = u.Identifier
                 }).ToList()
@@ -83,9 +84,8 @@ public class ProjectRepo : IProjectRepo
             }).ToListAsync();
 
     public async Task<bool> CheckIfExistAsync(int projectId)
-    {
-        return await context.Project.Where(s => s.Id == projectId).AnyAsync();
-    }
+    => await context.Project.Where(s => s.Id == projectId).AnyAsync();
+
     public async Task<string> GetProjectFileNameByIdAsync(int projectId)
     => await context.Project.Where(s => s.Id == projectId).Select(s => s.File).FirstOrDefaultAsync();
 
@@ -105,8 +105,7 @@ public class ProjectRepo : IProjectRepo
             {
                 Id = p.Doctor.Id,
                 Name = p.Doctor.Name
-            }
-            ,
+            },
             Users = p.Users.Select(u => new UserDto
             {
                 Name = p.Users.Select(u => u.Name).FirstOrDefault(),
