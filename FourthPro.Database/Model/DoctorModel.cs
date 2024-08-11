@@ -7,4 +7,5 @@ public class DoctorModel
     public string Email { get; set; }
     public int DepartmentId { get; set; }
     public DepartmentModel Department { get; set; }
+    public List<ProjectModel> Projects { get; set; }
 }

@@ -3,10 +3,12 @@ using FourthPro.Repository.Subject;
 using FourthPro.Repository.User;
 using FourthPro.Service.Base;
 using FourthPro.Shared.Enum;
+using FourthPro.Shared.Exception;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -34,7 +36,10 @@ public class UserService : BaseService, IUserService
     {
         var hashPassword = HashPassword(dto.Password);
 
-        var id = await userRepo.SignUpAsync(dto, hashPassword);
+        if (await userRepo.CheckIfExistAsync(dto.Identifier))
+            throw new AlreadyExistException("university number (Identifier) is already exist..");
+
+        var userId = await userRepo.SignUpAsync(dto, hashPassword);
         //TODO : Add default subjects to user (i have to know the semester)
         //var subjects = await subjectRepo.GetAllAsync(dto.Year, );
         //var subjects = new StudentSubjectModel();
@@ -56,8 +61,28 @@ public class UserService : BaseService, IUserService
         //    case YearType.Fifth:
         //        break;
         //}
-        var token = await CreateTokenAsync(true, id, 1);
+        var token = await CreateTokenAsync(userId, RoleType.Student);
         return token;
+    }
+    public async Task<string> SignInAsync(int identifier, string password)
+    {
+        var x = CurrentJwtId;
+        var user = await userRepo.GetUserModelAsync(identifier) ??
+            throw new NotFoundException("Password Or Identifier Wrong");
+
+        await CheckPasswordCorrectness(password, user.HashedPassword, user.Id);
+
+        await userRepo.RemoveUserTokenAsync(user.Id);
+        var token = await CreateTokenAsync(user.Id, user.Role);
+
+        return token;
+    }
+    public async Task SignOutAsync()
+    {
+        if (string.IsNullOrEmpty(CurrentJwtId))
+            throw new ValidationException("You do not have active session ");
+
+        await userRepo.RemoveUserTokenAsync(CurrentUserId);
     }
     public async Task<List<UserDto>> GetAllAsync()
     {
@@ -81,18 +106,18 @@ public class UserService : BaseService, IUserService
         if (CurrentUserId == -1)
             throw new Exception("You do not have Authorize..");
 
-        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
+        if (await userRepo.CheckIfStudentByIdentifierAsync(CurrentUserId))
             throw new Exception("You do not have permission..");
 
         return await userRepo.GetUsersCountAsync(year);
     }
 
-    public async Task<string> CreateTokenAsync(bool isStudent, long id, int role /*admin\student*/)
+    public async Task<string> CreateTokenAsync(int userId, RoleType role /*admin\student*/)
     {
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new(ClaimTypes.NameIdentifier, id.ToString()),
+            new(ClaimTypes.NameIdentifier, userId.ToString()),
             new(ClaimTypes.Role, role.ToString()),
             new("role", role.ToString())
         };
@@ -107,6 +132,8 @@ public class UserService : BaseService, IUserService
         var token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
         var bearerToken = "Bearer " + token;
 
+        await userRepo.AddTokenAsync(bearerToken, userId);
+
         return bearerToken;
     }
     private string HashPassword(string password)
@@ -114,11 +141,35 @@ public class UserService : BaseService, IUserService
         var passwordHasher = new PasswordHasher<object>();
         return passwordHasher.HashPassword(null, password);
     }
-    public int GetCurrentUserId()
+
+    private PasswordVerificationResult CheckPassword(string password, string hash, out string newHash)
     {
-        var claim = httpContextAccessor.HttpContext.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier);
-        if (claim == null)
-            return -1;
-        return int.Parse(claim.Value);
+        var passwordHasher = new PasswordHasher<object>();
+        var result = passwordHasher.VerifyHashedPassword(null, hash, password);
+        if (result == PasswordVerificationResult.SuccessRehashNeeded)
+        {
+            newHash = HashPassword(password);
+            return result;
+        }
+        else if (result == PasswordVerificationResult.Success)
+        {
+            newHash = hash;
+            return result;
+        }
+        newHash = null;
+        return result;
+    }
+    public async Task CheckPasswordCorrectness(string password, string hashPassword, long userId)
+    {
+        if (hashPassword == null)
+            throw new ValidationException("Password Or Identifier Wrong");
+
+        var isMatchPassword = CheckPassword(password, hashPassword, out string newHash);
+
+        if (isMatchPassword == PasswordVerificationResult.Failed)
+            throw new ValidationException("Password Or Identifier Wrong");
+
+        if (isMatchPassword == PasswordVerificationResult.SuccessRehashNeeded)
+            await userRepo.ChangePasswordAsync(newHash, userId);
     }
 }

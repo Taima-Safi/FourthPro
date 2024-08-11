@@ -2,6 +2,7 @@
 using FourthPro.Dto.Subject;
 using FourthPro.Repository.Doctor;
 using FourthPro.Repository.Subject;
+using FourthPro.Repository.User;
 using FourthPro.Service.Base;
 using FourthPro.Shared.Enum;
 using FourthPro.Shared.Exception;
@@ -15,12 +16,14 @@ public class SubjectService : BaseService, ISubjectService
 {
     private readonly ISubjectRepo subjectRepo;
     private readonly IDoctorRepo doctorRepo;
+    private readonly IUserRepo userRepo;
 
-    public SubjectService(ISubjectRepo subjectRepo, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDoctorRepo doctorRepo)
+    public SubjectService(ISubjectRepo subjectRepo, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDoctorRepo doctorRepo, IUserRepo userRepo)
         : base(configuration, httpContextAccessor)
     {
         this.subjectRepo = subjectRepo;
         this.doctorRepo = doctorRepo;
+        this.userRepo = userRepo;
     }
     public async Task<int> AddAsync(SubjectFormDto dto)
     {
@@ -29,7 +32,7 @@ public class SubjectService : BaseService, ISubjectService
 
         string fileName = null;
         if (dto.LastQuestionsFile != null)
-            fileName = FileHelper.UploadFile(dto.LastQuestionsFile, false);
+            fileName = FileHelper.UploadFile(dto.LastQuestionsFile, FileType.LastQuestionsFile);
 
         return await subjectRepo.AddAsync(dto, fileName);
     }
@@ -53,7 +56,7 @@ public class SubjectService : BaseService, ISubjectService
             if (file == null)
                 throw new NotFoundException("You have to add file..");
 
-            var fileName = FileHelper.UploadFile(file, false);
+            var fileName = FileHelper.UploadFile(file, FileType.LastQuestionsFile);
 
             await subjectRepo.UpdateSubjectToAddFileAsync(fileName, subjectId);
             return fileName;
@@ -70,6 +73,11 @@ public class SubjectService : BaseService, ISubjectService
 
         await subjectRepo.UpdateSubjectToRemoveFileAsync(subjectId);
     }
+    public async Task SelectFromOptionalSubjectsAsync(int subjectId)
+    {
+
+        await subjectRepo.SelectFromOptionalSubjectsAsync(subjectId, CurrentUserId);
+    }
     public async Task<string> GetLastQuestionsFileNameById(int subjectId)
     {
         if (!await subjectRepo.CheckIfExistAsync(subjectId))
@@ -81,9 +89,14 @@ public class SubjectService : BaseService, ISubjectService
 
         return fileName;
     }
-    public async Task<List<SubjectDto>> GetAllAsync(YearType? year, SemesterType? semester, bool? isDefault, string? title)
+    public async Task<List<SubjectDto>> GetAllAsync(YearType? year, SemesterType? semester, bool? isDefault, string title)
     {
         return await subjectRepo.GetAllAsync(year, semester, isDefault, title);
+    }
+    public async Task<List<SubjectDto>> GatAllCurrentUserSubjectAsync(YearType? year)
+    {
+        //var studentYear = await userRepo.GetStudentYearAsync(CurrentUserId);
+        return await subjectRepo.GatAllCurrentUserSubjectAsync(CurrentUserId, year);
     }
     public async Task<SubjectDto> GetByIdAsync(int subjectId)
     {
@@ -114,7 +127,7 @@ public class SubjectService : BaseService, ISubjectService
 
         string fileName = null;
         if (dto.LectureFile != null)
-            fileName = FileHelper.UploadFile(dto.LectureFile, true);
+            fileName = FileHelper.UploadFile(dto.LectureFile, FileType.Lecture);
 
         return await subjectRepo.AddLectureAsync(dto, fileName);
     }
@@ -146,7 +159,7 @@ public class SubjectService : BaseService, ISubjectService
         if (file == null)
             throw new NotFoundException("You have to add file..");
 
-        var fileName = FileHelper.UploadFile(file, false);
+        var fileName = FileHelper.UploadFile(file, FileType.Lecture);
 
         await subjectRepo.UpdateLectureToAddFileAsync(fileName, lectureId);
     }

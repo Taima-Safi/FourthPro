@@ -24,7 +24,7 @@ public class DoctorService : BaseService, IDoctorService
         if (CurrentUserId == -1)
             throw new AccessViolationException("You do not have Authorize..");
 
-        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
+        if (await userRepo.CheckIfStudentByIdentifierAsync(CurrentUserId))
             throw new UnauthorizedAccessException("You do not have permission to add doctor..");
 
         var doctorId = await doctorRepo.AddAsync(dto);

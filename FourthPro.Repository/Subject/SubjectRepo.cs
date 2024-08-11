@@ -58,6 +58,18 @@ public class SubjectRepo : ISubjectRepo
                 File = s.File
             }).ToListAsync();
 
+    public async Task<List<SubjectDto>> GatAllCurrentUserSubjectAsync(int userId, YearType? year) // with filter for year
+        => await context.StudentSubject.Where(u => u.UserId == userId && (!year.HasValue || u.Subject.Year == year))
+            .Select(s => new SubjectDto
+            {
+                Id = s.Subject.Id,
+                File = s.Subject.File,
+                Type = s.Subject.Type,
+                Title = s.Subject.Title,
+                Semester = s.Subject.Semester,
+                Description = s.Subject.Description,
+            }).ToListAsync();
+
     public async Task<bool> CheckIfExistAsync(int subjectId)
         => await context.Subject.Where(s => s.Id == subjectId).AnyAsync();
 
@@ -129,6 +141,16 @@ public class SubjectRepo : ISubjectRepo
 
     public async Task UpdateSubjectToRemoveFileAsync(int subjectId)
         => await context.Subject.Where(p => p.Id == subjectId).ExecuteUpdateAsync(p => p.SetProperty(p => p.File, ""));
+
+    public async Task SelectFromOptionalSubjectsAsync(int subjectId, int userId)
+    {
+        await context.StudentSubject.AddAsync(new StudentSubjectModel
+        {
+            UserId = userId,
+            SubjectId = subjectId,
+        });
+        await context.SaveChangesAsync();
+    }
 
     public async Task RemoveAsync(int subjectId)
         => await context.Subject.Where(p => p.Id == subjectId).ExecuteDeleteAsync();

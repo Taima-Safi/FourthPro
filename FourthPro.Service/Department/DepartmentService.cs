@@ -2,6 +2,7 @@
 using FourthPro.Repository.Department;
 using FourthPro.Repository.User;
 using FourthPro.Service.Base;
+using FourthPro.Shared.Enum;
 using FourthPro.Shared.Exception;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -20,11 +21,18 @@ public class DepartmentService : BaseService, IDepartmentService
     }
     public async Task<int> AddAsync(string name)
     {
+        var x = await userRepo.GetUserTokenActiveAsync(CurrentUserId);
+        if (x == null)
+            throw new UnauthorizedAccessException();
+
+        if (x.User.Role != RoleType.Admin)
+            throw new UnauthorizedAccessException();
+
         if (CurrentUserId == -1)
             throw new AccessViolationException("You do not have Authorize..");
 
         if (!userRepo.checkIfAdmin(CurrentUserId))
-            throw new UnauthorizedAccessException("You do not have permission to add department..");
+            throw new UnauthorizedAccessException();
 
         var departmentId = await departmentRepo.AddAsync(name);
         return departmentId;
@@ -48,8 +56,8 @@ public class DepartmentService : BaseService, IDepartmentService
         if (CurrentUserId == -1)
             throw new AccessViolationException("You do not have Authorize..");
 
-        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
-            throw new UnauthorizedAccessException("You do not have permission to edit department..");
+        if (await userRepo.CheckIfStudentByIdentifierAsync(CurrentUserId))
+            throw new UnauthorizedAccessException();
 
         if (!await departmentRepo.CheckIfExist(departmentId))
             throw new NotFoundException("Department not found..");
@@ -61,8 +69,8 @@ public class DepartmentService : BaseService, IDepartmentService
         if (CurrentUserId == -1)
             throw new AccessViolationException("You do not have Authorize..");
 
-        if (await userRepo.CheckIfStudentByIdentifier(CurrentUserId))
-            throw new UnauthorizedAccessException("You do not have permission to delete department..");
+        if (await userRepo.CheckIfStudentByIdentifierAsync(CurrentUserId))
+            throw new UnauthorizedAccessException();
 
         if (!await departmentRepo.CheckIfExist(departmentId))
             throw new NotFoundException("Department not found..");

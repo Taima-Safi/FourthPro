@@ -32,10 +32,11 @@ public class AuthMiddleware : IMiddleware
             //string role = context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
 
             //Check if he don't have a token or it's expired.
-            if (string.IsNullOrEmpty(token) /*|| !context.User.Identity.IsAuthenticated*/)
-                throw new UnauthorizedAccessException();
-
             var userRepo = context.RequestServices.GetRequiredService<IUserRepo>();
+            string userId = context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+            if (string.IsNullOrEmpty(token) || !await userRepo.CheckIfTokenActiveAsync(token) /*|| !context.User.Identity.IsAuthenticated*/)
+                throw new UnauthorizedAccessException();
 
             //string jwtId = context.User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti).Value;
             //if (!await tokenRepo.CheckIfCurrentTokenValidAsync(jwtId))
@@ -50,7 +51,8 @@ public class AuthMiddleware : IMiddleware
 
             if (controllerName.Contains("Dashboard"))
             {
-                if (int.Parse(context.User.FindFirstValue(ClaimTypes.Role)) == 0)
+                //if (int.Parse(context.User.FindFirstValue(ClaimTypes.Role)) == 0)
+                if (await userRepo.GetRoleAsync(int.Parse(userId)) == Shared.Enum.RoleType.Admin)
                 {
                     await next(context);
                     return;

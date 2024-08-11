@@ -51,11 +51,23 @@ public class DoctorRepo : IDoctorRepo
             {
                 Id = d.Department.Id,
                 Title = d.Department.Title
-            }
+            },
+
         }).FirstOrDefaultAsync();
 
     public async Task<int> GetDoctorsCountAsync(string search)//filter by department name, can be null
     => await context.Doctor.Where(d => (string.IsNullOrEmpty(search) || d.Department.Title.Contains(search))).CountAsync();
+
+    public async Task<int> GetDoctorProjectCountAsync(int doctorId)
+    {
+        DateTime semesterDate = new();
+        if (DateTime.UtcNow.Month > 11 && DateTime.UtcNow.Month < 2)//first semester
+            semesterDate = DateTime.Parse($"11/1/{DateTime.UtcNow.Year}"); // month/day/year
+        else
+            semesterDate = DateTime.Parse($"11/1/{DateTime.UtcNow.Year - 1}");
+
+        return await context.Project.Where(d => d.DoctorId == doctorId && d.Date.Date > semesterDate && d.Date.Date < DateTime.UtcNow).CountAsync();
+    }
 
     public async Task UpdateAsync(DoctorFormDto dto, int doctorId)
         => await context.Doctor.Where(d => d.Id == doctorId).ExecuteUpdateAsync(d => d.SetProperty(d => d.Email, dto.Email).SetProperty(d => d.DepartmentId, dto.DepartmentId).SetProperty(d => d.Name, dto.Name));

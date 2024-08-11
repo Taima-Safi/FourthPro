@@ -13,7 +13,7 @@ public class SubjectDto
     public SectionType Type { get; set; }
     public string Description { get; set; }
     public SemesterType Semester { get; set; }
-    public string? File { get; set; }
+    public string File { get; set; }
     // [NotMapped]
     // public IFormFile LastQuestionsFile { get; set; }
     public DoctorDto Doctor { get; set; }

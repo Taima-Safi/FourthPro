@@ -1,11 +1,12 @@
-﻿using FourthPro.Shared.Exception;
+﻿using FourthPro.Shared.Enum;
+using FourthPro.Shared.Exception;
 using Microsoft.AspNetCore.Http;
 
 namespace FourthPro.Uploads;
 
 public class FileHelper
 {
-    public static string UploadFile(IFormFile file, bool isLecture)
+    public static string UploadFile(IFormFile file, FileType type)
     {
         List<string> validExtentions = new List<string>() { ".jpg", ".jpeg", ".pdf", ".png", ".gif", ".bmp" };
         var extention = Path.GetExtension(file.FileName);
@@ -20,11 +21,25 @@ public class FileHelper
         string fileName = Guid.NewGuid().ToString() + extention;
 
         string folderName = "";
-        if (isLecture)
-            folderName = Path.Combine("Uploads", "LectureFiles");
-        else
-            folderName = Path.Combine("Uploads", "LastQuestionsFile");
+        //if (isLecture)
+        //    folderName = Path.Combine("Uploads", "LectureFiles");
+        //else
+        //    folderName = Path.Combine("Uploads", "LastQuestionsFile");
 
+        switch (type)
+        {
+            case FileType.LastQuestionsFile:
+                folderName = Path.Combine("Uploads", "LastQuestionsFile");
+                break;
+
+            case FileType.Lecture:
+                folderName = Path.Combine("Uploads", "LectureFiles");
+                break;
+
+            case FileType.Project:
+                folderName = Path.Combine("Uploads", "ProjectFiles");
+                break;
+        }
         string path = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
         var fullPath = Path.Combine(path, fileName);
@@ -37,15 +52,24 @@ public class FileHelper
 
         return fileName;
     }
-    public static async Task<MemoryStream> DownloadFile(string fileName, bool isLecture)
+    public static async Task<MemoryStream> DownloadFile(string fileName, FileType type)
     {
 
         string folderName = "";
-        if (isLecture)
-            folderName = Path.Combine("Uploads", "LectureFiles");
-        else
-            folderName = Path.Combine("Uploads", "LastQuestionsFile");
+        switch (type)
+        {
+            case FileType.LastQuestionsFile:
+                folderName = Path.Combine("Uploads", "LastQuestionsFile");
+                break;
 
+            case FileType.Lecture:
+                folderName = Path.Combine("Uploads", "LectureFiles");
+                break;
+
+            case FileType.Project:
+                folderName = Path.Combine("Uploads", "ProjectFiles");
+                break;
+        }
         // string path = Path.Combine(Directory.GetCurrentDirectory(), folderName, fileName);
 
         //var fullPath = Path.Combine(path, fileName);
