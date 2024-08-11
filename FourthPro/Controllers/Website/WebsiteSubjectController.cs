@@ -34,6 +34,12 @@ public class WebsiteSubjectController : ControllerBase
         var result = await subjectService.GetAllAsync(year, semester, isDefault, title);
         return Ok(result);
     }
+    [HttpGet]
+    public async Task<IActionResult> GatAllCurrentUserSubject(YearType? year)
+    {
+        var result = await subjectService.GatAllCurrentUserSubjectAsync(year);
+        return Ok(result);
+    }
     [HttpPost]
     public async Task<IActionResult> SelectFromOptionalSubjects(int subjectId)
     {

@@ -21,4 +21,6 @@ public interface IUserRepo
     Task RemoveUserTokenAsync(int userId);
     Task RemoveTokenAsync(string token);
     Task<UserTokenModel> GetUserTokenActiveAsync(int userId);
+    Task<YearType> GetStudentYearAsync(int id);
+    Task<bool> CheckIfTokenActiveAsync(string token);
 }

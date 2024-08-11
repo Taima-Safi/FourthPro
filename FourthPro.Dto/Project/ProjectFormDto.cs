@@ -11,6 +11,7 @@ public class ProjectFormDto
     public IFormFile? File { get; set; }
     public SectionType Type { get; set; }
     public string Description { get; set; }
+    public SemesterType Semester { get; set; }
 
     public int DoctorId { get; set; }
     public List<int> UserIds { get; set; }

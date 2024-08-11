@@ -16,4 +16,5 @@ public interface IProjectRepo
     //Task<List<UserDto>> GetProjectUsersAsync(int projectId);
     Task RemoveAsync(int projectId);
     Task UpdateAsync(ProjectFormDto dto, int projectId);
+    Task UpdateUserProjectAsync(int projectId, SemesterType semester, int userId);
 }

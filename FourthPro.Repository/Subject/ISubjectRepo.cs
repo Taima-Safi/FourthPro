@@ -27,4 +27,5 @@ public interface ISubjectRepo
     Task<LectureDto> GetLectureByIdAsync(int lectureId);
     Task<bool> CheckIfLectureExistAsync(int lectureId);
     Task SelectFromOptionalSubjectsAsync(int subjectId, int userId);
+    Task<List<SubjectDto>> GatAllCurrentUserSubjectAsync(int userId, YearType? year);
 }

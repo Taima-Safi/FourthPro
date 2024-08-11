@@ -18,8 +18,8 @@ public class WebsiteProjectController : ControllerBase
         this.projectService = projectService;
     }
     [HttpPost]
-    public async Task<IActionResult> Add(ProjectFormDto dto, SemesterType semester)
-    => Ok(await projectService.AddAsync(dto, semester));
+    public async Task<IActionResult> Add(ProjectFormDto dto)
+    => Ok(await projectService.AddAsync(dto));
 
     [HttpGet, AllowAnonymous]
     public async Task<IActionResult> DownloadProjectFile(string fileName)

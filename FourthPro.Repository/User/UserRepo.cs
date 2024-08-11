@@ -42,12 +42,17 @@ public class UserRepo : IUserRepo
     }
     public async Task<UserTokenModel> GetUserTokenActiveAsync(int userId) => await context.UserToken
         .Where(t => t.UserId == userId && t.IsActive == true).Include(u => u.User).FirstOrDefaultAsync();
+    public async Task<bool> CheckIfTokenActiveAsync(string token) => await context.UserToken
+        .Where(t => t.Token == token && t.IsActive == true).AnyAsync();
     public async Task RemoveUserTokenAsync(int userId)
     => await context.UserToken.Where(t => t.UserId == userId).ExecuteUpdateAsync(t => t.SetProperty(t => t.IsActive, false));
     public async Task RemoveTokenAsync(string token)
     {
         await context.UserToken.Where(t => t.Token == token).ExecuteUpdateAsync(t => t.SetProperty(t => t.IsActive, false));
     }
+
+    public async Task<YearType> GetStudentYearAsync(int id)
+        => await context.User.Where(u => u.Id == id).Select(u => u.Year).FirstOrDefaultAsync();
 
     public async Task<bool> CheckIfStudentByIdentifierAsync(int id)
         => await context.User.AnyAsync(u => u.Id == id && u.Identifier != 0);

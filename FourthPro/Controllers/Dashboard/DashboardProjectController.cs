@@ -19,9 +19,9 @@ public class DashboardProjectController : ControllerBase
     //public async Task<IActionResult> Add(ProjectFormDto dto)
     //=> Ok(await projectService.AddAsync(dto));
     [HttpGet]
-    public async Task<IActionResult> GatAll(int? fourthProjectId, int? fifthProjectId)
+    public async Task<IActionResult> GatAll(SectionType? type, DateTime? date)
     {
-        var result = await projectService.GetAllAsync(fourthProjectId, fifthProjectId);
+        var result = await projectService.GetAllAsync(type, date);
         return Ok(result);
     }
     [HttpGet]

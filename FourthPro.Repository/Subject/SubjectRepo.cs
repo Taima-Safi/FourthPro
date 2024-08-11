@@ -58,6 +58,18 @@ public class SubjectRepo : ISubjectRepo
                 File = s.File
             }).ToListAsync();
 
+    public async Task<List<SubjectDto>> GatAllCurrentUserSubjectAsync(int userId, YearType? year) // with filter for year
+        => await context.StudentSubject.Where(u => u.UserId == userId && (!year.HasValue || u.Subject.Year == year))
+            .Select(s => new SubjectDto
+            {
+                Id = s.Subject.Id,
+                File = s.Subject.File,
+                Type = s.Subject.Type,
+                Title = s.Subject.Title,
+                Semester = s.Subject.Semester,
+                Description = s.Subject.Description,
+            }).ToListAsync();
+
     public async Task<bool> CheckIfExistAsync(int subjectId)
         => await context.Subject.Where(s => s.Id == subjectId).AnyAsync();
 

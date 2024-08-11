@@ -2,7 +2,6 @@
 using FourthPro.Database.Model;
 using FourthPro.Dto.Department;
 using FourthPro.Dto.Doctor;
-using FourthPro.Shared.Enum;
 using Microsoft.EntityFrameworkCore;
 
 namespace FourthPro.Repository.Doctor;
@@ -52,13 +51,14 @@ public class DoctorRepo : IDoctorRepo
             {
                 Id = d.Department.Id,
                 Title = d.Department.Title
-            }
+            },
+
         }).FirstOrDefaultAsync();
 
     public async Task<int> GetDoctorsCountAsync(string search)//filter by department name, can be null
     => await context.Doctor.Where(d => (string.IsNullOrEmpty(search) || d.Department.Title.Contains(search))).CountAsync();
 
-    public async Task<int> GetDoctorProjectCountAsync(SemesterType semester)
+    public async Task<int> GetDoctorProjectCountAsync(int doctorId)
     {
         DateTime semesterDate = new();
         if (DateTime.UtcNow.Month > 11 && DateTime.UtcNow.Month < 2)//first semester
@@ -66,7 +66,7 @@ public class DoctorRepo : IDoctorRepo
         else
             semesterDate = DateTime.Parse($"11/1/{DateTime.UtcNow.Year - 1}");
 
-        return await context.Project.Where(d => d.DoctorId == 1 && d.Date.Date > semesterDate && d.Date.Date < DateTime.UtcNow).CountAsync();
+        return await context.Project.Where(d => d.DoctorId == doctorId && d.Date.Date > semesterDate && d.Date.Date < DateTime.UtcNow).CountAsync();
     }
 
     public async Task UpdateAsync(DoctorFormDto dto, int doctorId)

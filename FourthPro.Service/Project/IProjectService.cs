@@ -5,7 +5,7 @@ namespace FourthPro.Service.Project;
 
 public interface IProjectService
 {
-    Task<int> AddAsync(ProjectFormDto dto, SemesterType semester);
+    Task<int> AddAsync(ProjectFormDto dto);
     Task<List<ProjectDto>> GetAllAsync(SectionType? type, DateTime? date);
     Task<ProjectDto> GetByIdAsync(int projectId);
     Task<int> GetProjectCountAsync(int? doctorId, SectionType? type, string tool);

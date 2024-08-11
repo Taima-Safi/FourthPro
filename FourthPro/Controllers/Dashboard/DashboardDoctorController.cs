@@ -1,4 +1,5 @@
 ﻿using FourthPro.Dto.Doctor;
+using FourthPro.Service.Department;
 using FourthPro.Service.Doctor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

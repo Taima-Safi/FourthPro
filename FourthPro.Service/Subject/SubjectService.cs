@@ -2,6 +2,7 @@
 using FourthPro.Dto.Subject;
 using FourthPro.Repository.Doctor;
 using FourthPro.Repository.Subject;
+using FourthPro.Repository.User;
 using FourthPro.Service.Base;
 using FourthPro.Shared.Enum;
 using FourthPro.Shared.Exception;
@@ -15,12 +16,14 @@ public class SubjectService : BaseService, ISubjectService
 {
     private readonly ISubjectRepo subjectRepo;
     private readonly IDoctorRepo doctorRepo;
+    private readonly IUserRepo userRepo;
 
-    public SubjectService(ISubjectRepo subjectRepo, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDoctorRepo doctorRepo)
+    public SubjectService(ISubjectRepo subjectRepo, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDoctorRepo doctorRepo, IUserRepo userRepo)
         : base(configuration, httpContextAccessor)
     {
         this.subjectRepo = subjectRepo;
         this.doctorRepo = doctorRepo;
+        this.userRepo = userRepo;
     }
     public async Task<int> AddAsync(SubjectFormDto dto)
     {
@@ -89,6 +92,11 @@ public class SubjectService : BaseService, ISubjectService
     public async Task<List<SubjectDto>> GetAllAsync(YearType? year, SemesterType? semester, bool? isDefault, string title)
     {
         return await subjectRepo.GetAllAsync(year, semester, isDefault, title);
+    }
+    public async Task<List<SubjectDto>> GatAllCurrentUserSubjectAsync(YearType? year)
+    {
+        //var studentYear = await userRepo.GetStudentYearAsync(CurrentUserId);
+        return await subjectRepo.GatAllCurrentUserSubjectAsync(CurrentUserId, year);
     }
     public async Task<SubjectDto> GetByIdAsync(int subjectId)
     {

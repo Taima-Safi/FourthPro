@@ -27,10 +27,18 @@ public class ProjectRepo : IProjectRepo
             Tools = dto.Tools,
             Date = DateTime.UtcNow,
             DoctorId = dto.DoctorId,
+            Semester = dto.Semester,
             Description = dto.Description
         });
         await context.SaveChangesAsync();
         return project.Entity.Id;
+    }
+    public async Task UpdateUserProjectAsync(int projectId, SemesterType semester, int userId)
+    {
+        if (semester == SemesterType.First)
+            await context.User.Where(u => u.Id == userId).ExecuteUpdateAsync(u => u.SetProperty(u => u.FifthProjectId, projectId));
+        else
+            await context.User.Where(u => u.Id == userId).ExecuteUpdateAsync(u => u.SetProperty(u => u.FourthProjectId, projectId));
     }
 
     public async Task<List<ProjectDto>> GetAllAsync(SectionType? type, DateTime? date)

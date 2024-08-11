@@ -26,4 +26,5 @@ public interface ISubjectService
     Task<LectureDto> GetLectureByIdAsync(int lectureId);
     Task RemoveLectureAsync(int lectureId);
     Task SelectFromOptionalSubjectsAsync(int subjectId);
+    Task<List<SubjectDto>> GatAllCurrentUserSubjectAsync(YearType? year);
 }
