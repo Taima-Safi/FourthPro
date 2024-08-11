@@ -1,6 +1,7 @@
 ﻿using FourthPro.Dto.Project;
 using FourthPro.Repository.Doctor;
 using FourthPro.Repository.Project;
+using FourthPro.Repository.User;
 using FourthPro.Service.Base;
 using FourthPro.Shared.Enum;
 using FourthPro.Shared.Exception;
@@ -13,6 +14,7 @@ namespace FourthPro.Service.Project;
 public class ProjectService : BaseService, IProjectService
 {
     private readonly IProjectRepo projectRepo;
+    private readonly IUserRepo userRepo;
     private readonly IDoctorRepo doctorRepo;
 
     public ProjectService(IProjectRepo projectRepo, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDoctorRepo doctorRepo)
@@ -88,7 +90,12 @@ public class ProjectService : BaseService, IProjectService
     }
     public async Task RemoveAsync(int projectId)
     {
-        //TODO : check if admin
+        if (CurrentUserId == -1)
+            throw new AccessViolationException("You do not have Authorize..");
+
+        if (await userRepo.CheckIfStudentByIdentifierAsync(CurrentUserId))
+            throw new UnauthorizedAccessException();
+
         if (!await projectRepo.CheckIfExistAsync(projectId))
             throw new NotFoundException("Project not found..");
 

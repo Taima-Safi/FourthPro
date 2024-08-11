@@ -27,6 +27,12 @@ public class SubjectService : BaseService, ISubjectService
     }
     public async Task<int> AddAsync(SubjectFormDto dto)
     {
+        if (CurrentUserId == -1)
+            throw new AccessViolationException("You do not have Authorize..");
+
+        if (await userRepo.CheckIfStudentByIdentifierAsync(CurrentUserId))
+            throw new UnauthorizedAccessException();
+
         if (!await doctorRepo.CheckIfExistAsync(dto.DoctorId))
             throw new NotFoundException("Doctor not found..");
 
@@ -38,6 +44,12 @@ public class SubjectService : BaseService, ISubjectService
     }
     public async Task UpdateAsync(SubjectFormDto dto, int subjectId)
     {
+        if (CurrentUserId == -1)
+            throw new AccessViolationException("You do not have Authorize..");
+
+        if (await userRepo.CheckIfStudentByIdentifierAsync(CurrentUserId))
+            throw new UnauthorizedAccessException();
+
         if (!await subjectRepo.CheckIfExistAsync(subjectId))
             throw new NotFoundException("Subject not found..");
 
@@ -50,6 +62,11 @@ public class SubjectService : BaseService, ISubjectService
     {
         try
         {
+            if (CurrentUserId == -1)
+                throw new AccessViolationException("You do not have Authorize..");
+
+            if (await userRepo.CheckIfStudentByIdentifierAsync(CurrentUserId))
+                throw new UnauthorizedAccessException();
 
             if (!await subjectRepo.CheckIfExistAsync(subjectId))
                 throw new NotFoundException("Subject not found..");
@@ -68,6 +85,12 @@ public class SubjectService : BaseService, ISubjectService
     }
     public async Task UpdateSubjectToRemoveFileAsync(int subjectId)
     {
+        if (CurrentUserId == -1)
+            throw new AccessViolationException("You do not have Authorize..");
+
+        if (await userRepo.CheckIfStudentByIdentifierAsync(CurrentUserId))
+            throw new UnauthorizedAccessException();
+
         if (!await subjectRepo.CheckIfExistAsync(subjectId))
             throw new NotFoundException("Subject not found..");
 
@@ -122,6 +145,12 @@ public class SubjectService : BaseService, ISubjectService
     #region Lecture
     public async Task<int> AddLectureAsync(LectureFormDto dto)
     {
+        if (CurrentUserId == -1)
+            throw new AccessViolationException("You do not have Authorize..");
+
+        if (await userRepo.CheckIfStudentByIdentifierAsync(CurrentUserId))
+            throw new UnauthorizedAccessException();
+
         if (!await subjectRepo.CheckIfExistAsync(dto.SubjectId))
             throw new NotFoundException("Subject not found..");
 
@@ -144,6 +173,12 @@ public class SubjectService : BaseService, ISubjectService
     }
     public async Task UpdateLectureAsync(LectureFormDto dto, int lectureId)
     {
+        if (CurrentUserId == -1)
+            throw new AccessViolationException("You do not have Authorize..");
+
+        if (await userRepo.CheckIfStudentByIdentifierAsync(CurrentUserId))
+            throw new UnauthorizedAccessException();
+
         if (!await subjectRepo.CheckIfLectureExistAsync(lectureId))
             throw new NotFoundException("Lecture not found..");
 
@@ -154,6 +189,12 @@ public class SubjectService : BaseService, ISubjectService
     }
     public async Task UpdateLectureToAddFileAsync(IFormFile file, int lectureId)
     {
+        if (CurrentUserId == -1)
+            throw new AccessViolationException("You do not have Authorize..");
+
+        if (await userRepo.CheckIfStudentByIdentifierAsync(CurrentUserId))
+            throw new UnauthorizedAccessException();
+
         if (!await subjectRepo.CheckIfLectureExistAsync(lectureId))
             throw new NotFoundException("Lecture not found..");
         if (file == null)
@@ -165,6 +206,12 @@ public class SubjectService : BaseService, ISubjectService
     }
     public async Task UpdateLectureToRemoveFileAsync(int lectureId)
     {
+        if (CurrentUserId == -1)
+            throw new AccessViolationException("You do not have Authorize..");
+
+        if (await userRepo.CheckIfStudentByIdentifierAsync(CurrentUserId))
+            throw new UnauthorizedAccessException();
+
         if (!await subjectRepo.CheckIfLectureExistAsync(lectureId))
             throw new NotFoundException("Lecture not found..");
 
@@ -181,6 +228,12 @@ public class SubjectService : BaseService, ISubjectService
     }
     public async Task RemoveLectureAsync(int lectureId)
     {
+        if (CurrentUserId == -1)
+            throw new AccessViolationException("You do not have Authorize..");
+
+        if (await userRepo.CheckIfStudentByIdentifierAsync(CurrentUserId))
+            throw new UnauthorizedAccessException();
+
         if (!await subjectRepo.CheckIfLectureExistAsync(lectureId))
             throw new NotFoundException("Lecture not found..");
 
